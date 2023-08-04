@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.rip::before, .rip::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    border: 4px solid transparent;
+    border-top-color: white;
+    border-right-color: white;
+    border-radius: 100%;
+    pointer-events: none;
+}
+
+.rip::before {
+    left: 0;
+}
+
+.rip::after {
+    transform: translate(-50%, -50%) rotate(225deg);
+    right: -8px;
+}
+
+@layer utilities {
+    .text__ellipsis_1 {
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+    }
+    .text__ellipsis_2 {
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+    }
+    .text__ellipsis_3 {
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+    }
+}

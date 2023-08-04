@@ -1,0 +1,13 @@
+@keyframes toast-slide-up {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.toast {
+  animation: toast-slide-up 0.3s;
+  will-change: transform;
+}
