@@ -9,6 +9,8 @@
     "scripts": {
         "build": "turbo run build",
         "build:main": "turbo run build --filter=main...",
+        "build:booking": "turbo run build --filter=booking...",
+        "build:flight": "turbo run build --filter=flight...",
         "dev": "turbo run dev",
         "start": "turbo run start",
         "clean": "turbo run clean && rm -rf node_modules",
