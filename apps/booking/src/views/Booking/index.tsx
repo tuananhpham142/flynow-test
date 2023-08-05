@@ -1,7 +1,7 @@
 'use client';
 import { Button, Card, Divider, Typography } from '@acme/design-system';
-import CreateBookingContext from 'contexts/create-booking-context/createBookingContext';
 import React, { useContext } from 'react';
+import CreateBookingContext from 'src/contexts/create-booking-context/createBookingContext';
 import BaggageCard from './components/cards/BaggageCard';
 import BedSelectCard from './components/cards/BedSelectCard';
 import CustomerContact from './components/cards/CustomerContact';
