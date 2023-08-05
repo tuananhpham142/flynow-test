@@ -1,12 +1,12 @@
-import React, { createContext, useEffect, useReducer, useLayoutEffect, useState } from 'react';
+import { createContext, useEffect, useLayoutEffect, useReducer, useState } from 'react';
 
 // types
-import type { InitSessionData, SessionModel } from 'models/Session/SessionModel';
-import type { Action, CreateBookingProviderProps, CreateBookingContextType } from './createBookingContext.types';
+import type { Action, CreateBookingContextType, CreateBookingProviderProps } from './createBookingContext.types';
 
 // enums
+import { SessionModel } from '@/models/Session/SessionModel';
+import { useGetSessionMutation } from '@/services/session';
 import { CreateBookingDispatchEnum } from './createBookingContext.types';
-import { useGetSessionMutation } from 'services/session';
 
 // initial state
 const initialState: CreateBookingContextType = {
