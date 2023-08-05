@@ -1,6 +1,6 @@
 const path = require('path');
 
-const { HOME_URL, FLIGHT_URL, BOOKING_URL } = process.env;
+const { FLIGHT_URL, BOOKING_URL, ACCOMMODATION_URL } = process.env;
 
 module.exports = {
     reactStrictMode: false,
@@ -38,6 +38,14 @@ module.exports = {
             {
                 source: '/booking/:path*',
                 destination: `${BOOKING_URL}/booking/:path*`,
+            },
+            {
+                source: '/accommodation',
+                destination: `${ACCOMMODATION_URL}/accommodation`,
+            },
+            {
+                source: '/accommodation/:path*',
+                destination: `${ACCOMMODATION_URL}/accommodation/:path*`,
             },
         ];
     },

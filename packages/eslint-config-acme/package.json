@@ -1,7 +1,7 @@
 {
   "name": "eslint-config-acme",
   "version": "0.0.1",
-  "repository": "https://github.com/vercel/examples.git",
+  "repository": "https://bitbucket.softcom.vn/scm/scflynt/flynow-next-microfe.git",
   "license": "MIT",
   "main": "index.js",
   "publishConfig": {

@@ -1,6 +1,7 @@
 import { Card, Chip, ListRenderer, Typography } from '@acme/design-system';
 import { FC } from 'react';
 import ListItemHorizontal from '../../ListItemHorizontal';
+// import ListItemHorizontal from '@acme/pages/components/ListItemHorizontal';
 interface IProps {
     result: Array<any>;
 }

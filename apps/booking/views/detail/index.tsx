@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
-import SlideShow from './components/SlideShow';
+import { FC } from 'react';
 import AnchorTabs from './components/AnchorTabs';
-import GeneralInfo from './components/GeneralInfo';
 import DetailsInfo from './components/DetailsInfo';
-import Reviews from './components/Reviews';
+import GeneralInfo from './components/GeneralInfo';
 import Recommend from './components/Recommend';
+import Reviews from './components/Reviews';
 import RoomTypesSelection from './components/RoomTypesSelection';
+import SlideShow from './components/SlideShow';
 
 interface IProps {}
 
@@ -17,7 +17,7 @@ const AccommodationDetail: FC<IProps> = (props) => {
             <SlideShow />
             <AnchorTabs />
 
-            <div className='container max-w-[1280px] mx-auto'>
+            <div className='container max-w-[1200px] mx-auto'>
                 <GeneralInfo />
                 <RoomTypesSelection />
                 <DetailsInfo />

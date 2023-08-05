@@ -39,8 +39,8 @@ const FlightSearch: FC<IProps> = (props) => {
     }, [keyword]);
 
     return (
-        <div className='flex flex-col bg-white p-6 rounded-b-[24px] gap-2 shadow'>
-            <div className='rounded w-full mb-4 flex items-center gap-2'>
+        <>
+            <div className='rounded w-full flex items-center gap-2'>
                 <div className='flex items-center hover:text-primary'>
                     <Typography className='text-grey-800 me-2'>Khứ hồi</Typography>
 
@@ -275,7 +275,7 @@ const FlightSearch: FC<IProps> = (props) => {
                     </Button>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 export default FlightSearch;

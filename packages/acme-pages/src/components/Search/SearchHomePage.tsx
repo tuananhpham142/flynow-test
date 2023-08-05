@@ -21,12 +21,16 @@ const SearchHomePage: FC<IProps> = (props) => {
             </div>
             {focus === 1 && (
                 <Suspense fallback={<FlightSearchSkeleton />}>
-                    <SearchFlight />
+                    <div className='flex flex-col bg-white p-6 rounded-b-[24px] gap-2 shadow'>
+                        <SearchFlight />
+                    </div>
                 </Suspense>
             )}
             {focus === 2 && (
                 <Suspense fallback={<FlightSearchSkeleton />}>
-                    <SearchAccommodation />
+                    <div className='flex flex-col bg-white p-6 rounded-b-[24px] gap-2 shadow'>
+                        <SearchAccommodation />
+                    </div>
                 </Suspense>
             )}
         </div>

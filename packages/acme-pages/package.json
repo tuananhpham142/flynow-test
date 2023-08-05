@@ -1,7 +1,7 @@
 {
     "name": "@acme/pages",
     "version": "0.0.1",
-    "repository": "https://github.com/vercel/examples.git",
+    "repository": "https://bitbucket.softcom.vn/scm/scflynt/flynow-next-microfe.git",
     "license": "MIT",
     "scripts": {
         "dev": "rm -rf dist && pnpm build:swc -w",

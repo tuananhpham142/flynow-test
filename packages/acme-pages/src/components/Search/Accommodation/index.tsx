@@ -22,20 +22,9 @@ const AccommodationSearch: FC<IProps> = (props) => {
     });
     const [keyword, setKeyword] = useState<string>('');
 
-    // const { trigger, data } = useQueriesManual(
-    //     `https://alphaapi.digipost.com.vn/api/publicbooking/airport/autosuggest/${keyword}`,
-    //     {},
-    // );
-
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         trigger();
-    //     }, 2000);
-    // }, [keyword]);
-
     return (
-        <div className='flex flex-col bg-white py-6 gap-2'>
-            <div className='rounded w-full mb-4 flex items-center gap-2'>
+        <>
+            <div className='rounded w-full flex items-center gap-2'>
                 <div className='flex items-center'>
                     <Typography className='text-grey-800 me-2'>1 Người lớn, 2 Trẻ em, 1 Em bé</Typography>
 
@@ -195,7 +184,7 @@ const AccommodationSearch: FC<IProps> = (props) => {
                     </Button>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 export default AccommodationSearch;

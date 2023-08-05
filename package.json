@@ -1,5 +1,5 @@
 {
-    "repository": "https://github.com/vercel/examples.git",
+    "repository": "https://bitbucket.softcom.vn/scm/scflynt/flynow-next-microfe.git",
     "license": "MIT",
     "private": true,
     "workspaces": [
@@ -9,9 +9,14 @@
     "scripts": {
         "build": "turbo run build",
         "build:main": "turbo run build --filter=main...",
-        "build:booking": "turbo run build --filter=booking...",
+        "build:accommodation": "turbo run build --filter=accommodation...",
         "build:flight": "turbo run build --filter=flight...",
+        "build:booking": "turbo run build --filter=booking...",
         "dev": "turbo run dev",
+        "dev:accommodation": "turbo run dev --filter=accommodation...",
+        "dev:main": "turbo run dev --filter=main...",
+        "dev:flight": "turbo run dev --filter=flight...",
+        "dev:booking": "turbo run dev --filter=booking...",
         "start": "turbo run start",
         "clean": "turbo run clean && rm -rf node_modules",
         "lint": "turbo run lint",
