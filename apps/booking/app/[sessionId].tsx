@@ -1,7 +1,7 @@
 'use client';
 import { SWRConfig } from '@acme/api';
 import { CreateBookingProvider } from 'contexts/create-booking-context/createBookingContext';
-import CreateBooking from 'views/Booking';
+import CreateBooking from './../views/Booking';
 
 type Props = {
     params: { sessionId: string };
