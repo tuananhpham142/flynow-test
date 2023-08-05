@@ -1,4 +1,4 @@
-import { AirlinesEnum } from 'models/Flight/FlightEnum';
+import { AirlinesEnum } from '@/models/Flight/FlightEnum';
 import { InitSessionData } from './SessionModel';
 
 type ContactInfo = {

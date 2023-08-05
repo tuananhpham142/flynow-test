@@ -1,5 +1,5 @@
-import { FlightGetSessionRequest } from 'models/Flight/FlightRequest';
-import { FlightGetSessionResponse } from 'models/Flight/FlightResponse';
+import { FlightGetSessionRequest } from '@/models/Flight/FlightRequest';
+import { FlightGetSessionResponse } from '@/models/Flight/FlightResponse';
 import { useMutation } from '@acme/api';
 
 export const useGetSessionMutation = () => {

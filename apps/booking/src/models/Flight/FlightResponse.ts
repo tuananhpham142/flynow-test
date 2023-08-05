@@ -1,4 +1,4 @@
-import { SessionModel } from 'models/Session/SessionModel';
+import { SessionModel } from '@/models/Session/SessionModel';
 
 export interface FlightAddPassengerResponse {}
 

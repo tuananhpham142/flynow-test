@@ -1,4 +1,4 @@
-import { PassengerFlightInfoModel } from 'models/Passenger/PassengerModel';
+import { PassengerFlightInfoModel } from '@/models/Passenger/PassengerModel';
 import { AirlinesEnum, FlightItinerary } from './FlightEnum';
 
 export type FareOption = {

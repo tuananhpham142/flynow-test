@@ -1,6 +1,6 @@
+import { FlightUpdateContactRequest } from '@/models/Flight/FlightRequest';
+import { FlightUpdateContactResponse } from '@/models/Flight/FlightResponse';
 import { useMutation } from '@acme/api';
-import { FlightUpdateContactRequest } from 'models/Flight/FlightRequest';
-import { FlightUpdateContactResponse } from 'models/Flight/FlightResponse';
 
 export const useUpdateContactMutation = (request: FlightUpdateContactRequest) => {
     const { body } = request;

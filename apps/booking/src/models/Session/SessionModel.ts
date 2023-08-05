@@ -1,7 +1,7 @@
-import { ContactInfo } from 'models/Contact/ContactModel';
-import { AirlinesEnum } from 'models/Flight/FlightEnum';
-import { FlightData, FlightInfoModel, FlightInfoSelected, FlightModel } from 'models/Flight/FlightModel';
-import { PassengerInfo } from 'models/Passenger/PassengerModel';
+import { ContactInfo } from '@/models/Contact/ContactModel';
+import { AirlinesEnum } from '@/models/Flight/FlightEnum';
+import { FlightData, FlightInfoModel, FlightInfoSelected } from '@/models/Flight/FlightModel';
+import { PassengerInfo } from '@/models/Passenger/PassengerModel';
 
 export type InitSessionData = {
     ItineraryType: number;

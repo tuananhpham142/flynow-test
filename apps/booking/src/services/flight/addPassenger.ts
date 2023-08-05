@@ -1,6 +1,6 @@
+import { FlightAddPassengerRequest } from '@/models/Flight/FlightRequest';
+import { FlightAddPassengerResponse } from '@/models/Flight/FlightResponse';
 import { useMutation } from '@acme/api';
-import { FlightAddPassengerRequest } from 'models/Flight/FlightRequest';
-import { FlightAddPassengerResponse } from 'models/Flight/FlightResponse';
 
 export const useAddPassengerMutation = (request: FlightAddPassengerRequest) => {
     return useMutation<FlightAddPassengerRequest['body'], FlightAddPassengerResponse>({
