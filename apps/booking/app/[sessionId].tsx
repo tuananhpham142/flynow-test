@@ -1,11 +1,7 @@
 'use client';
-import React from 'react';
-import Booking from 'views/create-booking/index';
 import { SWRConfig } from '@acme/api';
 import { CreateBookingProvider } from 'contexts/create-booking-context/createBookingContext';
-import dynamic from 'next/dynamic';
-
-// const CreateBooking = dynamic(() => import('views/create-booking/index'), { ssr: false });
+import Booking from 'views/Booking/index';
 
 type Props = {
     params: { sessionId: string };

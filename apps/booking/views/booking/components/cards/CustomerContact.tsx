@@ -1,9 +1,8 @@
-import { useGetSessionMutation } from 'services/session';
-import { useUpdateContactMutation } from 'services/flight';
 import { Card, Input, RHFInput, Typography } from '@acme/design-system';
 import { FormProvider, useForm } from '@acme/design-system/ReactHookForm';
-import React, { useContext, useEffect } from 'react';
 import CreateBookingContext from 'contexts/create-booking-context/createBookingContext';
+import { useContext } from 'react';
+import { useUpdateContactMutation } from 'services/flight';
 
 type Props = {};
 
