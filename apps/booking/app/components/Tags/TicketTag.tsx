@@ -1,7 +1,7 @@
 'use client';
 
-import React, { FC } from 'react';
 import { Typography } from '@acme/design-system';
+import { FC } from 'react';
 
 interface IProps {}
 
