@@ -1,6 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable jsx-a11y/alt-text */
 'use client';
-import React, { FC, useState } from 'react';
-import { Modal, SwiperReact, FreeMode, Navigation, Thumbs } from '@acme/design-system';
+import { FreeMode, Modal, Navigation, SwiperReact, Thumbs } from '@acme/design-system';
+import { FC, useState } from 'react';
 
 interface IProps {
     visible: boolean;
@@ -9,7 +11,7 @@ interface IProps {
 
 const SlideShowModal: FC<IProps> = (props) => {
     const { visible, onClose } = props;
-    const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const [thumbsSwiper, setThumbsSwiper] = useState<any>(null);
 
     return (
         <Modal
@@ -20,10 +22,10 @@ const SlideShowModal: FC<IProps> = (props) => {
             body={
                 <div className={'w-screen h-screen bg-white p-4'}>
                     <SwiperReact.Swiper
-                        style={{
-                            '--swiper-navigation-color': '#000',
-                            '--swiper-pagination-color': '#000',
-                        }}
+                        // style={{
+                        //     '--swiper-navigation-color': '#000',
+                        //     '--swiper-pagination-color': '#000',
+                        // }}
                         loop={true}
                         navigation={true}
                         thumbs={{ swiper: thumbsSwiper }}
@@ -72,7 +74,7 @@ const SlideShowModal: FC<IProps> = (props) => {
                         </SwiperReact.SwiperSlide>
                     </SwiperReact.Swiper>
                     <SwiperReact.Swiper
-                        onSwiper={setThumbsSwiper}
+                        onSwiper={(swiper) => setThumbsSwiper(swiper)}
                         loop={true}
                         spaceBetween={10}
                         slidesPerView={4}
