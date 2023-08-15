@@ -1,5 +1,5 @@
 import { IconButton, Modal, Typography } from '@acme/design-system';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 interface IProps {
     visible: boolean;
@@ -43,10 +43,10 @@ const RoomDetailModal: FC<IProps> = (props) => {
                     <Typography variant={'body16'} className={'!text-grey-600'}>
                         Room with attached bathroom with a mini-bar, a flat-screen TV and Bluetooth speakers. A free
                         bottle of mineral water is provided. It is not possible to add an extra bed in this room. Twin
-                        beds are possible upon request and upon the hotel's confirmation. Room with attached bathroom
+                        beds are possible upon request and upon the hotels confirmation. Room with attached bathroom
                         with a mini-bar, a flat-screen TV and Bluetooth speakers. A free bottle of mineral water is
                         provided. It is not possible to add an extra bed in this room. Twin beds are possible upon
-                        request and upon the hotel's confirmation.
+                        request and upon the hotels confirmation.
                     </Typography>
                     <div className={'flex items-center gap-3'}>
                         <Typography variant={'caption'} className={'!text-grey-500'}>
