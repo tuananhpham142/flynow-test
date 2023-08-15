@@ -8,11 +8,9 @@ import FlightContext from '@/contexts/flight/FlightContext';
 type Props = {};
 
 const SelectedFlightCard = (props: Props) => {
-    const { flightInfoSelected } = React.useContext(FlightContext);
+    const { sessionData } = React.useContext(FlightContext);
 
-    console.log(flightInfoSelected);
-
-    const departureCardInfo = flightInfoSelected?.find((item) => item.Index === 1);
+    const departureCardInfo = sessionData?.FlightInfoSelected?.find((item) => item.Index === 1);
 
     if (!departureCardInfo) {
         return null;
@@ -152,7 +150,7 @@ const SelectedFlightCard = (props: Props) => {
                         variant='outline'
                         fullWidth
                         customClasses={{
-                            root: '!bg-[#0000] text-primary-lighter border-white hover:text-white',
+                            root: '!bg-[#0000] text-primary-lighter !border-white hover:text-white',
                         }}
                     >
                         Thay đổi chuyến bay

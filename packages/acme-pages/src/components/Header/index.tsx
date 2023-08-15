@@ -41,7 +41,7 @@ const Header = (props: Props) => {
     return (
         <header className='bg-white relative w-full z-50 border-b border-grey-300'>
             <AuthModal visible={showLoginModal} onClose={() => setShowLoginModal(false)} />
-            <div className='container max-w-[1440px] mx-auto'>
+            <div className='container max-w-[1400px] mx-auto'>
                 <div className='flex flex-wrap items-center justify-between px-[24px] py-[12px]'>
                     <div className='relative  w-full z-20 flex items-center justify-between md:px-0 lg:w-max'>
                         {/* Logo */}

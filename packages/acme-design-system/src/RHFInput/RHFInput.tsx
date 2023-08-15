@@ -6,10 +6,11 @@ import { RHFInputProps } from './RHFInput.types';
 
 const RHFInput: FC<RHFInputProps> = (props) => {
     const { rules, name, inputProps } = props;
-    const { control, resetField } = useFormContext();
+    const { control, resetField, setValue } = useFormContext();
 
     const handleClearInput = () => {
-        resetField(name, { defaultValue: null });
+        // resetField(name, { defaultValue: null });
+        setValue(name, '');
     };
 
     return (

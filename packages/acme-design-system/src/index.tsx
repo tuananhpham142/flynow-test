@@ -21,6 +21,8 @@ export { default as RangeSlider } from './RangeSlider';
 export { default as Select } from './Select';
 export { default as Switch } from './Switch';
 export { default as Textarea } from './Textarea';
+export { default as FormLabel } from './FormLabel';
+export { default as HelperText } from './HelperText';
 // React hook form start
 export * from 'clsx';
 export { default as dayjs } from 'dayjs';

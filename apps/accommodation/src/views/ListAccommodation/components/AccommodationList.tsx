@@ -1,4 +1,4 @@
-import AccommodationIntro from '@/app/components/Cards/AccommodationIntro';
+import AccommodationIntro from '@/components/Cards/AccommodationIntro';
 import { ListRenderer, Typography } from '@acme/design-system';
 
 type Props = {

@@ -49,7 +49,7 @@ export interface InputBaseProps
 export interface InputProps
     extends InputBaseProps,
         FormControlBaseProps<HTMLInputElement>,
-        CustomClasses<'inputContainer' | 'input' | 'label' | 'helperText'> {
+        CustomClasses<'inputContainer' | 'input' | 'label' | 'helperText' | 'clearIcon'> {
     variant?: string;
     label?: string;
     helperText?: string;

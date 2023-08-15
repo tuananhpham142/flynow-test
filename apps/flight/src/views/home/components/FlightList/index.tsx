@@ -11,7 +11,6 @@ import type { FlattedFlight } from '@/models/Flight/FlightModel';
 import { useOnScreen } from '@/hooks/useOnScreen';
 import FlightContext from '@/contexts/flight/FlightContext';
 import { FlightItinerary } from '@/models/Flight/FlightEnum';
-import { useRouter } from 'next/navigation';
 
 type Props = {
     flights: Array<FlattedFlight>;
@@ -24,11 +23,13 @@ const LOADMORE_DELAY = 1000;
 
 const FlightList = (props: Props) => {
     const { flights, isLoading } = props;
-    const { sessionId, updateFlightInfoSelected, flightViewMode } = React.useContext(FlightContext);
-    const router = useRouter();
+    const { sessionId, flightViewMode, updateSessionData } = React.useContext(FlightContext);
+
+    console.log(flightViewMode);
 
     const [renderLimit, setRenderLimit] = useState<number>(LOADMORE_STEP);
     const [isSelecting, setIsSelecting] = useState<boolean>(false);
+    const [isLoadingFlight, setIsLoadingFlight] = useState<string>('');
 
     const loadMoreRef = React.useRef<HTMLDivElement>(null);
     const loadMoreElementIsOnScreen = useOnScreen(loadMoreRef, '-50px');
@@ -59,6 +60,7 @@ const FlightList = (props: Props) => {
     const handleSelectFlight = async (flight: FlattedFlight) => {
         try {
             setIsSelecting(true);
+            setIsLoadingFlight(`${flight.FlightSession}${flight.GroupClass}${flight.Class}`);
             const res = await flightSelect({
                 body: {
                     SessionId: sessionId,
@@ -70,9 +72,14 @@ const FlightList = (props: Props) => {
             });
 
             if (res?.data?.Data) {
+                updateSessionData(res.data.Data);
                 const flightInfoSelected = res.data.Data.FlightInfoSelected;
                 if (flightInfoSelected.length === 1) {
-                    updateFlightInfoSelected(flightInfoSelected);
+                    if (res.data.Data.InitSessionData.ItineraryType === 1) {
+                        window.location.assign(`${window.location.origin}/booking/create-booking/${sessionId}`);
+                    } else {
+                        // updateFlightInfoSelected(flightInfoSelected);
+                    }
                 } else {
                     window.location.assign(`${window.location.origin}/booking/create-booking/${sessionId}`);
                 }
@@ -81,6 +88,7 @@ const FlightList = (props: Props) => {
             console.log(error);
         } finally {
             setIsSelecting(false);
+            setIsLoadingFlight('');
         }
     };
 
@@ -90,7 +98,14 @@ const FlightList = (props: Props) => {
                 <ListRenderer
                     renderKey={(item) => `${item.FlightSession}${item.GroupClass}${item.Class}`}
                     items={listItemRender}
-                    renderItem={(item) => <PlanTicketCard flight={item} onSelectFlight={handleSelectFlight} />}
+                    renderItem={(item) => (
+                        <PlanTicketCard
+                            isLoadingFlight={isLoadingFlight}
+                            isDisable={isSelecting}
+                            flight={item}
+                            onSelectFlight={handleSelectFlight}
+                        />
+                    )}
                     customClasses={{
                         wrapper: 'flex flex-col gap-3 w-full',
                         itemWrapper: 'flex-1 flex-col',

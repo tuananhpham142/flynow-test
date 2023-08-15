@@ -17,7 +17,7 @@ const DetailsInfo: FC<IProps> = (props) => {
     };
 
     return (
-        <div>
+        <div className='flex flex-col mt-10 gap-10'>
             <div>
                 <Typography htmlTag={'h5'} variant={'h5'}>
                     Tiện ích chỗ ở

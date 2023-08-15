@@ -7,7 +7,7 @@ const DetailPage: FC<IProps> = (props) => {
     const {} = props;
 
     return (
-        <div className='container max-w-[1440px] mx-auto'>
+        <div className='container max-w-[1400px] mx-auto'>
             <AccommodationDetail />
         </div>
     );

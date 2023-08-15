@@ -1,5 +1,6 @@
 import { IATA_AirlineCodes } from '@/types/types';
 import { FlightItinerary } from './FlightEnum';
+import { PassengerFlightInfoModel } from '../Passenger/PassengerModel';
 
 export type FareOption = {
     BaseAdult: number;
@@ -72,3 +73,32 @@ export type FlattedFlight = Omit<FlightModel, 'FareOptions'> & FareOption;
 
 export type SelectedFlight = FlightModel & { Index: FlightItinerary; ItineraryRelated: number };
 export type FlightInfoSelected = [SelectedFlight, SelectedFlight] | [SelectedFlight] | [];
+
+export type FlightData = {
+    DepartureFlights: Array<FlightModel>;
+    ReturnFlights: Array<FlightModel>;
+    ItineraryType: number;
+    DepartureDate: string | null;
+    ReturnDate: string | null;
+    StartPoint: string | null;
+    StartPointName: string | null;
+    StartPointCityName: string | null;
+    EndPoint: string | null;
+    EndPointName: string | null;
+    EndPointCityName: string | null;
+    Adult: number;
+    Children: number;
+    Infant: number;
+    DataSession: null;
+    IsDomestic: boolean;
+    Source: null;
+};
+
+export type FlightInfoModel = {
+    BookingItem: string;
+    FlightGateOrderId: string;
+    PNR: string;
+    TimeLimit: string;
+    FlightInfoSelected: FlightInfoSelected;
+    PassengerFlightInfo: Array<PassengerFlightInfoModel>;
+};

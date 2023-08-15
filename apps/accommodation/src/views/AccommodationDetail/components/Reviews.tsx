@@ -9,7 +9,7 @@ const Reviews: FC<IProps> = (props) => {
     const {} = props;
 
     return (
-        <div>
+        <div className='mt-10'>
             <Typography htmlTag={'h5'} variant={'h5'}>
                 Đánh giá
             </Typography>

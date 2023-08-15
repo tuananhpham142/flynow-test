@@ -13,7 +13,7 @@ module.exports = {
         // domains: [],
     },
     webpack: (config, options) => {
-        config.resolve.alias['@'] = path.join(__dirname, '/booking/src');
+        config.resolve.alias['@'] = path.join(__dirname, '/booking');
 
         return config;
     },

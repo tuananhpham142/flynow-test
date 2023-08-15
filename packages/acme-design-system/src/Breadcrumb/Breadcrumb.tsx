@@ -13,7 +13,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props) => {
     const calcCollapse = { itemsBefore: 1, itemsAfter: 1, max: 4, ...collapse };
 
     // styles
-    const rootClasses = clsx(`flex items-center justify-center`, customClasses?.root);
+    const rootClasses = clsx(`flex items-center`, customClasses?.root);
     const separatorClasses = clsx(`text-sm font-normal text-grey-600 px-2`, customClasses?.separator);
 
     const renderBreadcrumbItems = useCallback(() => {
@@ -56,7 +56,7 @@ const Breadcrumb: FC<BreadcrumbProps> = (props) => {
                 <Fragment key={`breadcrumb_item_${index}`}>
                     {index !== 0 && <span className={separatorClasses}>{separator}</span>}
 
-                    <BreadcrumbItem {...child}>{child.props.children}</BreadcrumbItem>
+                    <BreadcrumbItem {...child.props}>{child.props.children}</BreadcrumbItem>
                 </Fragment>
             ));
         }

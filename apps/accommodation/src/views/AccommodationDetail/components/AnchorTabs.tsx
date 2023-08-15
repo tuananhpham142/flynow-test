@@ -20,7 +20,7 @@ const AnchorTabs: FC<IProps> = (props) => {
     };
 
     return (
-        <div className='border-b border-grey-500'>
+        <div className='border-b border-grey-500 mb-8'>
             <Tabs
                 onChange={handleChangeTab}
                 value={value}

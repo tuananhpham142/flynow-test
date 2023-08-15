@@ -1,4 +1,4 @@
-export * from 'query-string';
+export { default as queryString } from 'query-string';
 
 export {
     type ParseOptions,
@@ -7,6 +7,5 @@ export {
     type Stringifiable,
     type StringifiableRecord,
     type StringifyOptions,
-    type UrlObject
+    type UrlObject,
 } from 'query-string';
-

@@ -3,78 +3,200 @@ import { useMutation } from '@acme/api';
 import {
     Button,
     Datepicker,
+    Divider,
     IconButton,
     Input,
     Popover,
     PopoverContent,
     PopoverTrigger,
+    StepperInput,
     Typography,
     dayjs,
 } from '@acme/design-system';
+import { useForm, FormProvider, set } from '@acme/design-system/ReactHookForm';
 import { DateValueType } from '@acme/design-system/DatePicker/DatePicker.types';
 import { FC, useEffect, useState } from 'react';
 import FlightAutosuggestResult from './FlightAutosuggestResult';
+import { domesticAirports } from './domesticAirports';
+import FlightSearchItineraryTypeDropdown from './FlightSearchItineraryTypeDropdown';
+import FlightSearchPassengerCount from './FlightSearchPassengerCount';
 
-interface IProps {}
+// types
+export type AirPort = {
+    CityId: string;
+    CityName: string;
+    CountryId: string;
+    CountryName: string;
+    Id: string;
+    IsDomestic: boolean;
+    Name: string;
+    PlaceId: string | null;
+    PlaceName: string | null;
+};
+interface IProps {
+    onSubmit: (data: any) => void;
+    initialData?: any;
+    isLoading?: boolean;
+}
+
+const SEARCH_DEBOUNCE_TIME = 300;
 
 const FlightSearch: FC<IProps> = (props) => {
+    const today = dayjs().format('YYYY-MM-DD');
+    const { onSubmit, initialData, isLoading } = props;
+    // value state
     const [valueDatePicker, setValueDatePicker] = useState<DateValueType>({
-        startDate: null,
-        endDate: null,
+        startDate: initialData?.DepartureDate || today,
+        endDate: initialData?.ReturnDate || today,
     });
-    const [keyword, setKeyword] = useState<string>('');
+    const [selectedDepartureAirport, setSelectedDepartureAirport] = useState<AirPort | null>(domesticAirports[0]);
+    const [selectedReturnAirport, setSelectedReturnAirport] = useState<AirPort | null>(domesticAirports[1]);
 
-    const { trigger, data } = useMutation<any, Array<any>>({
-        method: 'GET',
-        url: `https://alphaapi.digipost.com.vn/api/publicbooking/airport/autosuggest/${keyword}`,
-        request: {},
+    const [passengerCount, setPassengerCount] = useState({
+        Adult: initialData?.Adult || 1,
+        Children: initialData?.Children || 0,
+        Infant: initialData?.Infant || 0,
     });
+
+    const [itineraryType, setItineraryType] = useState<1 | 2>(initialData?.ItineraryType || 2);
+
+    const [isShowDepartureSearchResult, setIsShowDepartureSearchResult] = useState<boolean>(false);
+    const [isShowReturnSearchResult, setIsShowReturnSearchResult] = useState<boolean>(false);
+    const [isForcusCalendar, showIsForcusCalendar] = useState<boolean>(false);
+
+    const [departureInputValue, setDepartureInputValue] = useState<string>(
+        `${domesticAirports[0].CityName} (${domesticAirports[0].Id})`,
+    );
+    const [returnInputValue, setReturnInputValue] = useState<string>(
+        `${domesticAirports[1].CityName} (${domesticAirports[1].Id})`,
+    );
+
+    // services
+    const {
+        trigger: searchDepartureAirport,
+        data: departureAirports,
+        isMutating: isSearchDeparture,
+    } = useMutation<any, Array<AirPort>>({
+        method: 'GET',
+        url: `https://alphaapi.digipost.com.vn/api/publicbooking/airport/autosuggest/${departureInputValue}`,
+        // request: {},
+    });
+    const {
+        trigger: searchReturnAirport,
+        data: returnAirports,
+        isMutating: isSearchReturn,
+    } = useMutation<any, Array<AirPort>>({
+        method: 'GET',
+        url: `https://alphaapi.digipost.com.vn/api/publicbooking/airport/autosuggest/${returnInputValue}`,
+        // request: {},
+    });
+
+    // handlers
+    const handleSelectDepartureAirport = (airport: AirPort) => {
+        setSelectedDepartureAirport(airport);
+        setDepartureInputValue(`${airport.CityName} (${airport.Id})`);
+        setIsShowDepartureSearchResult(false);
+    };
+    const handleSelectReturnAirport = (airport: AirPort) => {
+        setSelectedReturnAirport(airport);
+        setReturnInputValue(`${airport.CityName} (${airport.Id})`);
+        setIsShowReturnSearchResult(false);
+    };
+    const handleSwapAirports = () => {
+        if (!selectedDepartureAirport || !selectedReturnAirport) return;
+        handleSelectDepartureAirport(selectedReturnAirport);
+        handleSelectReturnAirport(selectedDepartureAirport);
+    };
+
+    const handleSearchFlights = () => {
+        if (!selectedDepartureAirport) {
+            setIsShowDepartureSearchResult(true);
+            return;
+        }
+        if (!selectedReturnAirport) {
+            setIsShowReturnSearchResult(true);
+            return;
+        }
+        if (!valueDatePicker?.startDate) {
+            showIsForcusCalendar(true);
+            return;
+        }
+
+        onSubmit({
+            selectedDepartureAirport,
+            selectedReturnAirport,
+            valueDatePicker,
+            ...passengerCount,
+            ItineraryType: itineraryType,
+        });
+    };
+
+    // useEffects
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            if (isShowDepartureSearchResult) searchDepartureAirport();
+        }, SEARCH_DEBOUNCE_TIME);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [departureInputValue]);
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
-            trigger();
-        }, 3000);
+            if (isShowReturnSearchResult) searchReturnAirport();
+        }, SEARCH_DEBOUNCE_TIME);
 
         return () => clearTimeout(delayDebounceFn);
-    }, [keyword]);
+    }, [returnInputValue]);
+
+    // helpers
+    const getDepartureInputValue = () => {
+        return departureInputValue;
+    };
+    const getReturnInputValue = () => {
+        return returnInputValue;
+    };
+    const getDepartureAirports = () => {
+        const data =
+            departureAirports?.data?.Data && departureAirports.data.Data.length > 0
+                ? departureAirports.data.Data
+                : domesticAirports;
+
+        return data.filter((item) => item.Id !== selectedReturnAirport?.Id);
+    };
+    const getReturnAirports = () => {
+        const data =
+            returnAirports?.data?.Data && returnAirports.data.Data.length > 0
+                ? returnAirports.data.Data
+                : domesticAirports;
+
+        if (selectedDepartureAirport) {
+            return data.filter((item) => item.Id !== selectedDepartureAirport.Id);
+        }
+        return data;
+    };
 
     return (
         <>
-            <div className='rounded w-full flex items-center gap-2'>
-                <div className='flex items-center hover:text-primary'>
-                    <Typography className='text-grey-800 me-2'>Khứ hồi</Typography>
-
-                    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                        <path
-                            fill-rule='evenodd'
-                            clip-rule='evenodd'
-                            d='M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z'
-                            fill='#212B36'
-                        />
-                    </svg>
-                </div>
-                <div className='flex items-center'>
-                    <Typography className='text-grey-800 me-2'>1 Người lớn, 2 Trẻ em, 1 Em bé</Typography>
-
-                    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                        <path
-                            fill-rule='evenodd'
-                            clip-rule='evenodd'
-                            d='M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z'
-                            fill='#212B36'
-                        />
-                    </svg>
-                </div>
+            <div className='rounded w-full flex items-center gap-8'>
+                <FlightSearchItineraryTypeDropdown value={itineraryType} onChange={setItineraryType} />
+                <FlightSearchPassengerCount value={passengerCount} onChange={setPassengerCount} />
             </div>
             <div className='flex gap-2'>
                 <div className='flex gap-2 grow'>
-                    <div className='rounded flex-[5] flex flex-wrap items-center'>
+                    <div className='flex-[5] flex flex-wrap gap-1 items-center'>
                         <div className='flex-1'>
-                            <Popover placement='bottom-end'>
+                            <Popover
+                                placement='bottom-start'
+                                open={isShowDepartureSearchResult}
+                                onOpenChange={setIsShowDepartureSearchResult}
+                            >
                                 <PopoverTrigger>
                                     <Input
                                         customClasses={{
-                                            inputContainer: '!h-[56px] !rounded-lg',
+                                            inputContainer: `!h-[56px] !rounded-lg ${
+                                                isShowDepartureSearchResult && '!border-warning'
+                                            }`,
+                                            clearIcon: '!w-5 !h-5',
                                         }}
                                         startAdornment={
                                             <span className='text-grey-800 me-2'>
@@ -98,23 +220,41 @@ const FlightSearch: FC<IProps> = (props) => {
                                                 </svg>
                                             </span>
                                         }
-                                        value={keyword}
+                                        value={getDepartureInputValue()}
                                         onChange={(e) => {
-                                            setKeyword(e.target.value);
+                                            setDepartureInputValue(e.target.value);
+                                        }}
+                                        onClear={() => {
+                                            setDepartureInputValue('');
+                                            setSelectedDepartureAirport(null);
+                                        }}
+                                        // onBlur={() => {}}
+                                        onFocus={(e) => {
+                                            e.target.select();
                                         }}
                                         fullWidth
                                         size='lg'
                                         placeholder='Điểm đi'
                                     />
                                 </PopoverTrigger>
-                                <PopoverContent className='z-100 !w-96'>
-                                    <FlightAutosuggestResult result={data?.data?.Data || []} />
+                                <PopoverContent className='z-100 !w-[650px]'>
+                                    <FlightAutosuggestResult
+                                        keyword={departureInputValue}
+                                        onSelectHistory={(keyword) => {
+                                            setDepartureInputValue(keyword);
+                                            setSelectedDepartureAirport(null);
+                                        }}
+                                        onSelectedAirport={handleSelectDepartureAirport}
+                                        result={getDepartureAirports()}
+                                        isLoading={isSearchDeparture}
+                                    />
                                 </PopoverContent>
                             </Popover>
                         </div>
                         <IconButton
+                            onClick={handleSwapAirports}
                             customClasses={{
-                                root: '!bg-grey-300 hover:!bg-grey-400 text-grey-800 h-[56px] w-[56px] mx-2',
+                                root: '!bg-grey-300 hover:!bg-grey-400 text-grey-800 !h-[48px] !w-[48px]',
                             }}
                             size='md'
                         >
@@ -134,11 +274,18 @@ const FlightSearch: FC<IProps> = (props) => {
                             </svg>
                         </IconButton>
                         <div className='flex-1'>
-                            <Popover placement='bottom-end'>
+                            <Popover
+                                placement='bottom-end'
+                                open={isShowReturnSearchResult}
+                                onOpenChange={setIsShowReturnSearchResult}
+                            >
                                 <PopoverTrigger>
                                     <Input
                                         customClasses={{
-                                            inputContainer: '!h-[56px] !rounded-lg',
+                                            inputContainer: `!h-[56px] !rounded-lg ${
+                                                isShowReturnSearchResult && '!border-warning'
+                                            }`,
+                                            clearIcon: '!w-5 !h-5',
                                         }}
                                         startAdornment={
                                             <span className='text-grey-800 me-2'>
@@ -164,23 +311,54 @@ const FlightSearch: FC<IProps> = (props) => {
                                         }
                                         fullWidth
                                         size='lg'
-                                        value='Hồ Chí Minh  (SGN)'
+                                        onChange={(e) => {
+                                            setReturnInputValue(e.target.value);
+                                        }}
+                                        onClear={() => {
+                                            setReturnInputValue('');
+                                            setSelectedReturnAirport(null);
+                                        }}
+                                        // onBlur={() => {}}
+                                        onFocus={(e) => {
+                                            e.target.select();
+                                        }}
+                                        value={getReturnInputValue()}
                                         placeholder='Điểm đến'
                                     />
                                 </PopoverTrigger>
-                                <PopoverContent className='z-100 !w-96'>
-                                    <FlightAutosuggestResult result={[]} />
+                                <PopoverContent className='z-100 !w-[650px]'>
+                                    <FlightAutosuggestResult
+                                        isLoading={isSearchReturn}
+                                        keyword={returnInputValue}
+                                        onSelectHistory={(keyword) => {
+                                            setReturnInputValue(keyword);
+                                            setSelectedReturnAirport(null);
+                                        }}
+                                        onSelectedAirport={handleSelectReturnAirport}
+                                        result={getReturnAirports()}
+                                    />
                                 </PopoverContent>
                             </Popover>
                         </div>
                     </div>
-                    <div className='rounded flex-[4] flex items-center border border-grey-400 rounded-lg'>
+                    <div
+                        onFocus={() => {
+                            showIsForcusCalendar(true);
+                        }}
+                        onBlur={() => {
+                            showIsForcusCalendar(false);
+                        }}
+                        className={`flex-[4] flex items-center border rounded-lg h-[56px] ${
+                            isForcusCalendar ? 'border-warning' : 'border-grey-400'
+                        }`}
+                    >
                         <div className='grow'>
                             <Datepicker
                                 hasToggle
+                                primaryColor='warning'
                                 placeholder='Ngày đi'
-                                containerClassName={'h-[56px] rounded-lg'}
                                 useRange
+                                minDate={new Date(today)}
                                 startAdornment={
                                     <span className='text-grey-800 me-2'>
                                         <svg
@@ -223,10 +401,11 @@ const FlightSearch: FC<IProps> = (props) => {
                         <div className=''>|</div>
                         <div className='grow'>
                             <Datepicker
+                                primaryColor='warning'
                                 hasToggle
                                 clearable
+                                minDate={new Date(today)}
                                 placeholder='Ngày về'
-                                containerClassName={'h-[56px] rounded-lg'}
                                 useRange
                                 startAdornment={
                                     <span className='text-grey-800 me-2'>
@@ -270,8 +449,16 @@ const FlightSearch: FC<IProps> = (props) => {
                     </div>
                 </div>
                 <div className='rounded w-[120px]'>
-                    <Button variant='contained' color='primary' className='h-full w-full'>
-                        Tìm kiếm
+                    <Button
+                        onClick={handleSearchFlights}
+                        size='lg'
+                        variant='contained'
+                        color='primary'
+                        className='h-full w-full !rounded-lg'
+                        isLoading={isLoading}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? '' : 'Tìm kiếm'}
                     </Button>
                 </div>
             </div>

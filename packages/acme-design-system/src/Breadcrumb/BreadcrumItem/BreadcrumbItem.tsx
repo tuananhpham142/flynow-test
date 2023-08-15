@@ -12,7 +12,7 @@ const BreadcrumbItem: FC<BreadcrumbItemProps> = (props) => {
 
     return (
         <li className={rootClasses}>
-            {icon && <span className={'w-4 h-4 mr-1 text-grey-600'}>{icon}</span>}
+            {icon && <span className={'text-[16px] mr-1'}>{icon}</span>}
             <Link href={href || '#'} className='hover:underline'>
                 {children}
             </Link>

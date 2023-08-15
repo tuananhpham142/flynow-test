@@ -1,34 +1,25 @@
 import React, { createContext, useReducer } from 'react';
 
 // types
-import type { InitSessionData } from '@/models/FlightSession/SessionResponse';
-import type { FlattedFlight, FlightInfoSelected } from '@/models/Flight/FlightModel';
 import type { Action, FlightProviderProps, FlightContextType, AggregateData } from './FlightContext.type';
 
 // enums
 import { FlightDispatchEnum } from './FlightContext.type';
+import { SessionModel } from '@/models/FlightSession/SessionModel';
 
 // initial state
 const initialState: FlightContextType = {
     sessionId: '',
     sessionData: undefined,
-    returnFlights: [],
-    departureFlights: [],
-    isLoading: true,
     departureAggregate: {
         AirlineCode: [],
         GroupClass: [],
         Stops: [],
     },
-    flightInfoSelected: [],
     flightViewMode: 1,
-    updateDepartureFlights: () => {},
-    updateReturnFlights: () => {},
-    updateLoading: () => {},
-    updateDepartureAggregate: () => {},
+    updateFlightAggregate: () => {},
     updateSessionData: () => {},
     updateSessionId: () => {},
-    updateFlightInfoSelected: () => {},
 };
 
 // create context
@@ -38,53 +29,19 @@ const FlightContext = createContext<FlightContextType>(initialState);
 const handlers: Record<FlightDispatchEnum, (state: FlightContextType, action: Action) => FlightContextType> = {
     updateSessionData: (state, action) => {
         const { sessionData } = action.payload;
-        return { ...state, sessionData: sessionData };
+
+        // update view mode
+        const flightViewMode = sessionData?.FlightInfoSelected?.length === 1 ? 2 : 1;
+
+        return { ...state, sessionData: sessionData, flightViewMode: flightViewMode };
     },
     updateSessionId: (state, action) => {
         const { sessionId } = action.payload;
         return { ...state, sessionId: sessionId };
     },
-    updateDepartureFlights: (state, action) => {
-        const { departureFlights } = action.payload;
-        return {
-            ...state,
-            departureFlights: departureFlights,
-            isLoading: false,
-        };
-    },
-    updateReturnFlights: (state, action) => {
-        const { returnFlights } = action.payload;
-        return {
-            ...state,
-            returnFlights: returnFlights,
-            isLoading: false,
-        };
-    },
-    updateDepartureAggregate: (state, action) => {
+    updateFlightAggregate: (state, action) => {
         const { data } = action.payload;
         return { ...state, departureAggregate: data };
-    },
-    setLoading: (state, action) => {
-        const { isLoading } = action.payload;
-        return {
-            ...state,
-            isLoading: isLoading,
-        };
-    },
-    updateFlightInfoSelected: (state, action) => {
-        const { flightInfoSelected } = action.payload;
-        let viewMode;
-        if (state.sessionData?.ItineraryType === 1) {
-            viewMode = 1;
-        } else {
-            viewMode = flightInfoSelected.length === 0 ? 1 : 2;
-        }
-
-        return {
-            ...state,
-            flightInfoSelected: flightInfoSelected,
-            flightViewMode: viewMode,
-        };
     },
 };
 
@@ -97,37 +54,9 @@ const FlightProvider = (props: FlightProviderProps) => {
     const { children } = props;
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    // handler
-    const updateDepartureFlights = (newFlights: Array<FlattedFlight>) => {
+    const updateFlightAggregate = (departureAggregate: AggregateData) => {
         dispatch({
-            type: FlightDispatchEnum.updateDepartureFlights,
-            payload: {
-                departureFlights: newFlights,
-            },
-        });
-    };
-
-    const updateReturnFlights = (newFlights: Array<FlattedFlight>) => {
-        dispatch({
-            type: FlightDispatchEnum.updateReturnFlights,
-            payload: {
-                returnFlights: newFlights,
-            },
-        });
-    };
-
-    const updateLoading = (isLoading: boolean) => {
-        dispatch({
-            type: FlightDispatchEnum.setLoading,
-            payload: {
-                isLoading,
-            },
-        });
-    };
-
-    const updateDepartureAggregate = (departureAggregate: AggregateData) => {
-        dispatch({
-            type: FlightDispatchEnum.updateDepartureAggregate,
+            type: FlightDispatchEnum.updateFlightAggregate,
             payload: {
                 data: departureAggregate,
             },
@@ -143,7 +72,7 @@ const FlightProvider = (props: FlightProviderProps) => {
         });
     };
 
-    const updateSessionData = (sessionData: InitSessionData) => {
+    const updateSessionData = (sessionData: SessionModel) => {
         dispatch({
             type: FlightDispatchEnum.updateSessionData,
             payload: {
@@ -152,26 +81,13 @@ const FlightProvider = (props: FlightProviderProps) => {
         });
     };
 
-    const updateFlightInfoSelected = (flightInfoSelected: FlightInfoSelected) => {
-        dispatch({
-            type: FlightDispatchEnum.updateFlightInfoSelected,
-            payload: {
-                flightInfoSelected,
-            },
-        });
-    };
-
     return (
         <FlightContext.Provider
             value={{
                 ...state,
-                updateDepartureFlights,
-                updateReturnFlights,
-                updateLoading,
-                updateDepartureAggregate,
+                updateFlightAggregate,
                 updateSessionData,
                 updateSessionId,
-                updateFlightInfoSelected,
             }}
         >
             {children}

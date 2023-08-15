@@ -5,12 +5,20 @@ import FormLabel from '../FormLabel';
 import HelperText from '../HelperText/HelperText';
 import { InputProps } from './Input.types';
 
-const ClearIcon = () => {
+const ClearIcon = ({ size, className }: { size: 'sm' | 'md' | 'lg'; className?: string }) => {
+    const sizeMap: Record<string, string> = {
+        lg: 'w-4 h-4',
+        md: 'w-3 h-3',
+        sm: 'w-3 h-3',
+    };
+
+    const iconSize = sizeMap[size];
+
     return (
         <svg
-            className='fill-grey-400 cursor-pointer'
-            width='16'
-            height='16'
+            className={clsx('fill-grey-400 cursor-pointer', iconSize, className)}
+            // width='16'
+            // height='16'
             viewBox='0 0 24 24'
             fill='none'
             xmlns='http://www.w3.org/2000/svg'
@@ -56,7 +64,9 @@ const Input: React.FC<InputProps> = (props: InputProps) => {
         ref,
     } = props;
 
-    const [inputValue, setInputValue] = React.useState<any>(value || '');
+    // const [inputValue, setInputValue] = React.useState<any>(value || '');
+
+    const isClearable = !!onClear && value !== '';
 
     // input container classes
     const inputContainerSize: Record<string, string> = {
@@ -85,21 +95,21 @@ const Input: React.FC<InputProps> = (props: InputProps) => {
         customClasses?.input,
     );
 
-    const iconClasses = clsx('end-2', inputValue ? 'visible' : 'invisible');
+    const iconClasses = clsx('end-2', isClearable ? 'visible' : 'invisible');
 
     // handler
     const handleClearInput = () => {
         onClear && onClear();
-        setInputValue('');
+        // setInputValue('');
     };
 
     const handleChangeInput: InputProps['onChange'] = (e) => {
         onChange && onChange(e);
-        setInputValue(e.target.value);
+        // setInputValue(e.target.value);
     };
 
     React.useEffect(() => {
-        setInputValue(value);
+        // setInputValue(value);
     }, [value]);
 
     return (
@@ -123,7 +133,7 @@ const Input: React.FC<InputProps> = (props: InputProps) => {
                     autoFocus={autoFocus}
                     name={name}
                     id={id}
-                    value={inputValue}
+                    value={value}
                     ref={ref}
                 />
 
@@ -133,7 +143,7 @@ const Input: React.FC<InputProps> = (props: InputProps) => {
                     }}
                     className={iconClasses}
                 >
-                    <ClearIcon />
+                    <ClearIcon size={size} className={customClasses?.clearIcon} />
                 </div>
                 {endAdornment && endAdornment}
             </div>

@@ -11,6 +11,7 @@ export interface ButtonProps
         e?: React.MouseEvent<HTMLButtonElement>,
     ) => MouseEventHandler<any> | void | undefined | Promise<unknown | null>;
     startIcon?: ReactNode;
+    endIcon?: ReactNode;
     disabled?: boolean;
     fullWidth?: boolean;
     isLoading?: boolean;

@@ -25,7 +25,7 @@ const Dialog: React.FC<DialogProps<any>> = (props: DialogProps<any>) => {
     } = props;
     const mountTransition = useMountTransition(visible, 200);
 
-    const rootClasses = clsx('relative z-10 animate-fadeOutUp', visible && '!block');
+    const rootClasses = clsx('relative z-30 animate-fadeOutUp', visible && '!block');
 
     const dialogClasses = clsx(
         'relative bg-white overflow-hidden rounded-lg text-left shadow-xl sm:my-8 sm:w-full sm:max-w-lg animate-fadeInDown',

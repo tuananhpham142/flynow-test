@@ -13,6 +13,8 @@ import React, { useState } from 'react';
 import { getAirlineLogo } from '../Logos';
 
 // services
+import { useGetFareRuleQuery } from '@/services/flight/flightFareRule';
+import FlightContext from '@/contexts/flight/FlightContext';
 
 enum FlightDetailTabs {
     FLIGHT_DETAIL = 'FLIGHT_DETAIL',
@@ -22,10 +24,16 @@ enum FlightDetailTabs {
 type Props = {
     flight: FlattedFlight;
     onSelectFlight: (flight: FlattedFlight) => void;
+    isDisable?: boolean;
+    isLoadingFlight?: string;
 };
 
 const FlightCard = (props: Props) => {
-    const { onSelectFlight, flight } = props;
+    const { onSelectFlight, flight, isDisable, isLoadingFlight } = props;
+    const { sessionData } = React.useContext(FlightContext);
+
+    if (!sessionData) return null;
+
     const [showDetail, setShowDetail] = useState(false);
 
     const [detailTab, setDetailTab] = useState<FlightDetailTabs>(FlightDetailTabs.FLIGHT_DETAIL);
@@ -33,8 +41,19 @@ const FlightCard = (props: Props) => {
         setDetailTab(val);
     };
 
+    const isLoading = isLoadingFlight === `${flight.FlightSession}${flight.GroupClass}${flight.Class}`;
+
+    const { data: fareRuleData } = useGetFareRuleQuery({
+        AirlineCode: flight.AirlineCode || '',
+        ClassName: flight.GroupClass || '',
+        LanguageCode: 'vi-VN',
+    });
+
+    const fareRule = fareRuleData?.data?.Data;
+
     // handler
     const handleShowDetail = () => {
+        if (isDisable) return;
         setShowDetail(!showDetail);
     };
 
@@ -46,6 +65,14 @@ const FlightCard = (props: Props) => {
         EndTime: flight.EndDate,
         DiffType: 'days',
     });
+
+    const { Adult, Children, Infant } = sessionData.InitSessionData;
+
+    const adultPrice = flight.BaseAdult + flight.TaxAdult + flight.FeeAdult + flight.AirporFeetAdult;
+
+    const childrenPrice = flight.BaseChild + flight.TaxChild + flight.FeeChild + flight.AirportFeeChild;
+
+    const infantPrice = flight.BaseInf + flight.TaxInf + flight.FeeInf + flight.AirportFeeInf;
 
     return (
         <Card
@@ -150,6 +177,8 @@ const FlightCard = (props: Props) => {
                                 }}
                                 size='sm'
                                 className='w-[109px]'
+                                disabled={!isLoading && isDisable}
+                                isLoading={isLoading}
                             >
                                 Chọn
                             </Button>
@@ -290,6 +319,9 @@ const FlightCard = (props: Props) => {
                                                                             root: '!text-[13px] leading-[20px]',
                                                                         }}
                                                                     >
+                                                                        <Typography htmlTag='span' variant='subtitle14'>
+                                                                            Hành lý:
+                                                                        </Typography>{' '}
                                                                         {segment.HandBaggage &&
                                                                             `${segment.HandBaggage} hành lý xách tay`}
                                                                         {segment.BaggageAllowance &&
@@ -297,14 +329,31 @@ const FlightCard = (props: Props) => {
                                                                     </Typography>
                                                                 </div>
                                                                 <div className='flex gap-1'>
-                                                                    <i className='icon icon-ticket-back text-[20px]' />
+                                                                    <i className='icon icon-change-money text-[20px]' />
                                                                     <Typography
                                                                         customClasses={{
                                                                             root: '!text-[13px] leading-[20px]',
                                                                         }}
                                                                     >
-                                                                        Hoàn vé : Được phép, mất phí: 300.000 VNĐ (Giai
-                                                                        đoạn Tết Nguyên Đán mất phí 600.000 VNĐ)
+                                                                        <Typography htmlTag='span' variant='subtitle14'>
+                                                                            Hoàn huỷ:
+                                                                        </Typography>{' '}
+                                                                        {fareRule?.Translations[0].CancellationRefund ||
+                                                                            'Không được phép'}
+                                                                    </Typography>
+                                                                </div>
+                                                                <div className='flex gap-1'>
+                                                                    <i className='icon icon-change-time text-[20px]' />
+                                                                    <Typography
+                                                                        customClasses={{
+                                                                            root: '!text-[13px] leading-[20px]',
+                                                                        }}
+                                                                    >
+                                                                        <Typography htmlTag='span' variant='subtitle14'>
+                                                                            Đổi thời gian bay:
+                                                                        </Typography>{' '}
+                                                                        {fareRule?.Translations[0].TimeChange ||
+                                                                            'Không được phép'}
                                                                     </Typography>
                                                                 </div>
                                                                 <div className='flex gap-1'>
@@ -314,8 +363,11 @@ const FlightCard = (props: Props) => {
                                                                             root: '!text-[13px] leading-[20px]',
                                                                         }}
                                                                     >
-                                                                        Đổi lịch bay : Được phép đổi miễn phí + mất phí
-                                                                        chênh lệch nếu có.
+                                                                        <Typography htmlTag='span' variant='subtitle14'>
+                                                                            Đổi lịch bay:
+                                                                        </Typography>{' '}
+                                                                        {fareRule?.Translations[0].ItineraryChange ||
+                                                                            'Không được phép'}
                                                                     </Typography>
                                                                 </div>
                                                                 <div className='flex gap-1'>
@@ -325,17 +377,11 @@ const FlightCard = (props: Props) => {
                                                                             root: '!text-[13px] leading-[20px]',
                                                                         }}
                                                                     >
-                                                                        Thông tin hành khách : Không được phép..
-                                                                    </Typography>
-                                                                </div>
-                                                                <div className='flex gap-1'>
-                                                                    <i className='icon icon-ticket-back text-[20px]' />
-                                                                    <Typography
-                                                                        customClasses={{
-                                                                            root: '!text-[13px] leading-[20px]',
-                                                                        }}
-                                                                    >
-                                                                        Hoàn vé : Không được phép.
+                                                                        <Typography htmlTag='span' variant='subtitle14'>
+                                                                            Thay đổi thông tin:
+                                                                        </Typography>{' '}
+                                                                        {fareRule?.Translations[0]
+                                                                            .PassengerInfoChange || 'Không được phép'}
                                                                     </Typography>
                                                                 </div>
                                                             </div>
@@ -359,44 +405,76 @@ const FlightCard = (props: Props) => {
 
                                 {/* Detail Ticket Price */}
                                 <TabPane value={detailTab} id={FlightDetailTabs.PRICE_DETAIL}>
-                                    <div className='p-3'>
-                                        <table className='w-[645px]'>
-                                            <tr>
-                                                <th></th>
-                                                <th className='text-right font-bold text-grey-600'>Giá vé</th>
-                                                <th className='text-right font-bold text-grey-600'>Chiều đi</th>
-                                                <th className='text-right font-bold text-grey-600'>Chiều về</th>
-                                            </tr>
-                                            <tr>
-                                                <td className='text-grey-800 text-left p-1.5'>Giá vé người lớn</td>
-                                                <td className='text-grey-800 text-right p-1.5'>2x 11,245,000₫</td>
-                                                <td className='text-grey-800 text-right p-1.5'>11,245,000₫</td>
-                                                <td className='text-grey-800 text-right p-1.5'>11,245,000₫</td>
-                                            </tr>
-                                            <tr>
-                                                <td className='text-grey-800 text-left p-1.5'>Giá vé trẻ em</td>
-                                                <td className='text-grey-800 text-right p-1.5'>2x 8,540,000₫</td>
-                                                <td className='text-grey-800 text-right p-1.5'>8,540,000₫</td>
-                                                <td className='text-grey-800 text-right p-1.5'>8,540,000₫</td>
-                                            </tr>
-                                            <tr>
-                                                <td className='text-grey-800 text-left p-1.5'>Giá vé em bé</td>
-                                                <td className='text-grey-800 text-right p-1.5'>1x 4,260,000₫</td>
-                                                <td className='text-grey-800 text-right p-1.5'>4,260,000₫</td>
-                                                <td className='text-grey-800 text-right p-1.5'>4,260,000₫</td>
-                                            </tr>
-                                            <tr>
-                                                <td className='text-grey-800 text-left p-1.5 font-bold'>Tổng</td>
-                                                <td className='text-grey-800 text-right p-1.5 font-bold'>5 khách</td>
-                                                <td className='text-grey-800 text-right p-1.5 font-bold text-warning'>
-                                                    4,260,000₫
-                                                </td>
-                                                <td className='text-grey-800 text-right p-1.5 font-bold text-warning'>
-                                                    4,260,000₫
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
+                                    {sessionData && (
+                                        <div className='p-3'>
+                                            <table className='w-[645px]'>
+                                                <tr>
+                                                    <th className='text-left pl-2 font-bold text-grey-600'>
+                                                        Hành khách
+                                                    </th>
+                                                    <th className='text-right pr-1.5 font-bold text-grey-600'>
+                                                        Số lượng
+                                                    </th>
+                                                    <th className='text-right pr-1.5 font-bold text-grey-600'>
+                                                        Giá vé
+                                                    </th>
+                                                    <th className='text-right pr-1.5 font-bold text-grey-600'>
+                                                        Tổng cộng
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td className='text-grey-800 text-left p-1.5'>Giá vé người lớn</td>
+                                                    <td className='text-grey-800 text-right p-1.5'>{Adult}</td>
+                                                    <td className='text-grey-800 text-right p-1.5'>
+                                                        {currencyFormat(adultPrice)}
+                                                    </td>
+                                                    <td className='text-grey-800 text-right p-1.5'>
+                                                        {currencyFormat(adultPrice * Adult)}
+                                                    </td>
+                                                </tr>
+                                                {Boolean(Children) && (
+                                                    <tr>
+                                                        <td className='text-grey-800 text-left p-1.5'>Giá vé trẻ em</td>
+                                                        <td className='text-grey-800 text-right p-1.5'>{Children}</td>
+                                                        <td className='text-grey-800 text-right p-1.5'>
+                                                            {currencyFormat(childrenPrice)}
+                                                        </td>
+                                                        <td className='text-grey-800 text-right p-1.5'>
+                                                            {currencyFormat(childrenPrice * Children)}
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                                {Boolean(Infant) && (
+                                                    <tr>
+                                                        <td className='text-grey-800 text-left p-1.5'>Giá vé em bé</td>
+                                                        <td className='text-grey-800 text-right p-1.5'>{Infant}</td>
+                                                        <td className='text-grey-800 text-right p-1.5'>
+                                                            {currencyFormat(infantPrice)}
+                                                        </td>
+                                                        <td className='text-grey-800 text-right p-1.5'>
+                                                            {currencyFormat(infantPrice * Infant)}
+                                                        </td>
+                                                    </tr>
+                                                )}
+                                                <tr>
+                                                    <td className='text-grey-800 text-left p-1.5 font-bold'>Tổng</td>
+                                                    <td className='text-grey-800 text-right p-1.5 font-bold'>
+                                                        {Adult + Children + Infant} khách
+                                                    </td>
+                                                    <td className='text-grey-800 text-right p-1.5 font-bold text-warning'>
+                                                        {/* 4,260,000₫ */}
+                                                    </td>
+                                                    <td className='text-grey-800 text-right p-1.5 font-bold text-warning'>
+                                                        {currencyFormat(
+                                                            adultPrice * Adult +
+                                                                childrenPrice * Children +
+                                                                infantPrice * Infant,
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    )}
                                 </TabPane>
                                 {/* Detail Ticket Price */}
                             </TabContent>

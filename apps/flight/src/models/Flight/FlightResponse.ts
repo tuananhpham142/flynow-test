@@ -1,6 +1,8 @@
 import { FlightInfoSelected, FlightModel } from './FlightModel';
 import { IATA_AirlineCodes } from '@/types/types';
 import { InitSessionData } from '../FlightSession/SessionResponse';
+import { SessionModel } from '../FlightSession/SessionModel';
+import { AirlinesEnum } from './FlightEnum';
 
 export type ContactInfo = {
     FullName: string;
@@ -40,35 +42,9 @@ export type FlightData = {
     Source: null;
 };
 
-export interface FlightAvailabilitiesSearchResponse {
-    SessionId: string;
-    IsDomestic: true;
-    InitSessionData: InitSessionData;
-    Source: IATA_AirlineCodes;
-    FlightData: FlightData;
-    FlightInfoSelected: Array<FlightInfoSelected>;
-    PassengerInfo: [];
-    FlightInfo: [];
-    ContactInfo: ContactInfo;
-    BookingCode: string;
-    AId: string;
-    CId: string;
-}
+export interface FlightAvailabilitiesSearchResponse extends SessionModel {}
 
-export interface FlightSelectResponse {
-    SessionId: string;
-    IsDomestic: true;
-    InitSessionData: InitSessionData;
-    Source: IATA_AirlineCodes;
-    FlightData: FlightData;
-    FlightInfoSelected: FlightInfoSelected;
-    PassengerInfo: [];
-    FlightInfo: Array<FlightInfo>;
-    ContactInfo: ContactInfo;
-    BookingCode: string;
-    AId: string;
-    CId: string;
-}
+export interface FlightSelectResponse extends SessionModel {}
 
 export interface FlightAddPassengerResponse {}
 
@@ -76,7 +52,20 @@ export interface FlightAncillaryResponse {}
 
 export interface FlightCreateBookingResponse {}
 
-export interface FlightFareRulesResponse {}
+export interface FlightFareRulesResponse {
+    AirlineCode: string;
+    ClassCode: string;
+    ClassName: string;
+    Translations: [
+        {
+            CancellationRefund: string;
+            TimeChange: string;
+            ItineraryChange: string;
+            PassengerInfoChange: string;
+            Remarks: string;
+        },
+    ];
+}
 
 export interface FlightIssuesResponse {}
 

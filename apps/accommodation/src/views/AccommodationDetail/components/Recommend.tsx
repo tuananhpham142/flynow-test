@@ -1,7 +1,7 @@
 'use client';
-import RecommendCard from '@/app/components/Cards/RecommendCard';
+import React, { FC } from 'react';
 import { SwiperReact, Typography } from '@acme/design-system';
-import { FC } from 'react';
+import RecommendCard from '@/components/Cards/RecommendCard';
 
 interface IProps {}
 
@@ -9,7 +9,7 @@ const Recommend: FC<IProps> = (props) => {
     const {} = props;
 
     return (
-        <div>
+        <div className='mt-10'>
             <div className={'flex justify-between items-end'}>
                 <Typography htmlTag={'h5'} variant={'h5'}>
                     Gợi ý chỗ ở

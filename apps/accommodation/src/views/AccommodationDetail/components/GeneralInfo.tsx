@@ -40,19 +40,21 @@ const GeneralInfo: FC<IProps> = (props) => {
                     <Typography variant={'body14'}>Sạch sẽ</Typography>
                     <Typography variant={'subtitle14'}>9.0</Typography>
                 </div>
-                <Progress percentage={85} color={'warning'} />
+                <Progress percentage={80} color={'warning'} />
             </div>
         );
     };
 
     return (
         <>
-            <div className={'flex items-center'}>
+            <div className={'flex items-center border-b border-grey-300 mb-4'}>
                 <div className='basis-3/4'>
                     <Typography htmlTag={'h5'} variant={'h5'}>
                         The Luxury Collection Hotels & Resorts.
                     </Typography>
-                    <StarRated />
+                    <div className='mt-1 mb-4'>
+                        <StarRated />
+                    </div>
                     <Typography variant={'body16'} className={'text-grey-700'}>
                         Được xây dựng vào năm 2018, Golf Valley Hotel là sự bổ sung khác biệt cho Đà Lạt và là lựa chọn
                         thông minh cho du khách. Từ đây, khách có thể tận dụng tối đa tất cả những gì thành phố sôi động
@@ -60,7 +62,7 @@ const GeneralInfo: FC<IProps> = (props) => {
                         tiện nghi và dịch vụ được cung cấp bởi Golf Valley Hotel đảm bảo cho bạn một kỳ nghỉ dễ chịu.
                         ...Xem thêm
                     </Typography>
-                    <div className={'flex flex-row gap-2'}>
+                    <div className={'flex flex-row gap-2 my-3'}>
                         <Tag variant={'solid'} color={'warning'}>
                             #Khuyến mãi
                         </Tag>
@@ -74,7 +76,7 @@ const GeneralInfo: FC<IProps> = (props) => {
                             #Bán chạy nhất
                         </Tag>
                     </div>
-                    <div className={'flex flex-row gap-2'}>
+                    <div className={'flex flex-row gap-2 mb-6'}>
                         <Button variant='outline'>Chia sẻ</Button>
                         <Button variant='outline'>Yêu thích</Button>
                     </div>
@@ -84,7 +86,7 @@ const GeneralInfo: FC<IProps> = (props) => {
                         1.470.000₫
                     </Typography>
                     <Typography variant={'body16'}>1 phòng/ 1 đêm</Typography>
-                    <Button size={'xl'} rounded={'lg'}>
+                    <Button size={'xl'} rounded={'lg'} customClasses={{ root: 'mt-2 w-2/3' }}>
                         Chọn phòng
                     </Button>
                 </div>

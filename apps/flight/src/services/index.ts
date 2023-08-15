@@ -1,4 +1,4 @@
-export { searchAvailabilitiesFlight } from './flight/searchAvailableFlights';
+export { searchAvailabilitiesFlight, useSearchAvailabilitiesFlightMutation } from './flight/searchAvailableFlights';
 export { flightSelect } from './flight/flightSelect';
 
-export { flightInitSession } from './session/initSession';
+export { flightInitSession, useFlightInitSessionMutation } from './session/initSession';

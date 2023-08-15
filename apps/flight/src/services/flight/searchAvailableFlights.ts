@@ -1,4 +1,5 @@
 import { fetchAPI } from '@acme/api';
+import { useMutation } from '@acme/api';
 
 import { FlightAvailabilitiesSearchRequest } from '@/models/Flight/FlightRequest';
 import { FlightAvailabilitiesSearchResponse } from '@/models/Flight/FlightResponse';
@@ -9,5 +10,12 @@ export const searchAvailabilitiesFlight = async (data: FlightAvailabilitiesSearc
         method: 'POST',
         request: data.body,
         config: {},
+    });
+};
+
+export const useSearchAvailabilitiesFlightMutation = () => {
+    return useMutation<FlightAvailabilitiesSearchRequest['body'], FlightAvailabilitiesSearchResponse>({
+        url: 'https://alphaapi.digipost.com.vn/api/publicbooking/flight-availabilities-search',
+        method: 'POST',
     });
 };

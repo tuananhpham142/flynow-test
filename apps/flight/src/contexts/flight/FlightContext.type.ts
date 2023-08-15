@@ -1,4 +1,5 @@
 import { FlattedFlight, FlightInfoSelected } from '@/models/Flight/FlightModel';
+import { SessionModel } from '@/models/FlightSession/SessionModel';
 import { InitSessionData } from '@/models/FlightSession/SessionResponse';
 
 // providers props
@@ -8,13 +9,9 @@ export interface FlightProviderProps {
 
 // enums
 export enum FlightDispatchEnum {
-    setLoading = 'setLoading',
     updateSessionId = 'updateSessionId',
     updateSessionData = 'updateSessionData',
-    updateDepartureFlights = 'updateDepartureFlights',
-    updateReturnFlights = 'updateReturnFlights',
-    updateDepartureAggregate = 'updateDepartureAggregate',
-    updateFlightInfoSelected = 'updateFlightInfoSelected',
+    updateFlightAggregate = 'updateFlightAggregate',
 }
 
 export enum FlightViewMode {
@@ -41,20 +38,12 @@ export type AggregateData = Record<AggregateKeys, Array<AggregateValue>>;
 export interface FlightContextType {
     // state
     sessionId: string;
-    sessionData?: InitSessionData;
-    departureFlights: Array<FlattedFlight>;
-    returnFlights: Array<FlattedFlight>;
-    flightInfoSelected: FlightInfoSelected;
-    isLoading: boolean;
+    sessionData?: SessionModel;
     departureAggregate: AggregateData;
     flightViewMode: FlightViewMode;
 
     // handlers
-    updateLoading: (isLoading: boolean) => void;
     updateSessionId: (sessionId: string) => void;
-    updateSessionData: (sessionData: InitSessionData) => void;
-    updateDepartureFlights: (flights: Array<FlattedFlight>) => void;
-    updateReturnFlights: (flights: Array<FlattedFlight>) => void;
-    updateDepartureAggregate: (departureAggregate: AggregateData) => void;
-    updateFlightInfoSelected: (flightInfoSelected: FlightInfoSelected) => void;
+    updateSessionData: (sessionData: SessionModel) => void;
+    updateFlightAggregate: (departureAggregate: AggregateData) => void;
 }

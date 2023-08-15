@@ -44,11 +44,12 @@ const FlightTimesFilter = (props: Props) => {
     const { sessionData } = React.useContext(FlightContext);
 
     const [starTimeFilter, setStartTimeFilter] = useState<FilterGreaterAndLess>();
+    const [endTimeFilter, setEndTimeFilter] = useState<FilterGreaterAndLess>();
 
-    const departureDate = sessionData?.DepartureDate;
-    const returnDate = sessionData?.ReturnDate;
+    const departureDate = sessionData?.InitSessionData?.DepartureDate;
+    const returnDate = sessionData?.InitSessionData?.ReturnDate;
 
-    const handleTimeFilter = (checked: boolean, minHour: number, maxHour: number) => {
+    const handleStartTimeFilter = (checked: boolean, minHour: number, maxHour: number) => {
         const minTime = dayjs(departureDate)
             .set('hour', minHour)
             .set('minute', 0)
@@ -70,7 +71,7 @@ const FlightTimesFilter = (props: Props) => {
         }
     };
 
-    const handleResetFilter = () => {
+    const handleResetStartTimeFilter = () => {
         setStartTimeFilter(undefined);
     };
 
@@ -103,7 +104,7 @@ const FlightTimesFilter = (props: Props) => {
         <div className='flex flex-col gap-1'>
             <div className='flex justify-between'>
                 <Typography variant='subtitle16'>Thời gian cất cánh</Typography>
-                <IconButton onClick={handleResetFilter} size='sm' variant='text'>
+                <IconButton onClick={handleResetStartTimeFilter} size='sm' variant='text'>
                     <i className='icon icon-back text-xl' />
                 </IconButton>
             </div>
@@ -113,7 +114,7 @@ const FlightTimesFilter = (props: Props) => {
                         key={`TIME_${index}`}
                         circle
                         onChange={(e) => {
-                            handleTimeFilter(e.target.checked, time.value.min, time.value.max);
+                            handleStartTimeFilter(e.target.checked, time.value.min, time.value.max);
                         }}
                         checked={isChecked(time.value.min, time.value.max)}
                         label={time.label}

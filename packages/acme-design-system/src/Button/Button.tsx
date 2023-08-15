@@ -11,6 +11,7 @@ const Button: FC<ButtonProps> = (props) => {
         customClasses,
         disabled,
         startIcon,
+        endIcon,
         fullWidth,
         isLoading,
         className,
@@ -84,7 +85,12 @@ const Button: FC<ButtonProps> = (props) => {
         customClasses?.root,
     );
 
-    const iconClasses = clsx('mr-1', size && iconSizes[size], disabled && 'text-grey-300');
+    const iconClasses = clsx(
+        startIcon && 'mr-1',
+        endIcon && 'ml-1',
+        size && iconSizes[size],
+        disabled && 'text-grey-300',
+    );
 
     return (
         <button className={rootClasses} disabled={disabled || isLoading} onClick={onClick}>
@@ -107,6 +113,8 @@ const Button: FC<ButtonProps> = (props) => {
             )}
 
             <span className={customClasses?.label}>{children}</span>
+
+            {endIcon && !isLoading && <span className={iconClasses}>{endIcon}</span>}
         </button>
     );
 };

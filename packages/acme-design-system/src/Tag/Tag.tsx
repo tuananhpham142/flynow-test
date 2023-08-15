@@ -12,11 +12,11 @@ const Tag: React.FC<TagProps> = (props) => {
     const variants = {
         solid: {
             muted: checked ? 'bg-grey-400 text-white' : 'bg-grey-200 text-grey-800',
-            primary: checked ? 'bg-primary text-white' : 'bg-primary-lighter text-primary',
-            secondary: checked ? 'bg-secondary text-white' : 'bg-secondary-lighter text-secondary',
-            danger: checked ? 'bg-danger text-white' : 'bg-danger-lighter text-danger',
-            success: checked ? 'bg-success text-white' : 'bg-success-lighter text-success',
-            warning: checked ? 'bg-warning text-white' : 'bg-warning-lighter text-grey-700',
+            primary: checked ? 'bg-primary text-white' : 'bg-primary border border-primary text-white',
+            secondary: checked ? 'bg-secondary text-white' : 'bg-secondary border border-secondary text-white',
+            danger: checked ? 'bg-danger text-white' : 'bg-danger border border-danger text-white',
+            success: checked ? 'bg-success text-white' : 'bg-success border border-success text-white',
+            warning: checked ? 'bg-warning text-white' : 'bg-warning border border-warning text-white',
         },
         outline: {
             muted: checked
@@ -33,10 +33,10 @@ const Tag: React.FC<TagProps> = (props) => {
                 : 'bg-danger-light text-danger border border-danger',
             success: checked
                 ? 'bg-success text-white border border-success'
-                : 'bg-success-light text-success border border-success',
+                : 'bg-success-lighter text-success border border-success',
             warning: checked
                 ? 'bg-warning text-white border border-warning'
-                : 'bg-warning-light text-warning border border-warning',
+                : 'bg-warning-lighter text-warning border border-warning',
         },
     };
 

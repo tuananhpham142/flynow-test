@@ -18,7 +18,7 @@ const FormLabel: React.FC<FormLabelProps> = (props) => {
     return (
         <div className='flex items-center gap-1 mb-1'>
             <label className={labelClassName}>{label}</label>
-            <InfoIcon />
+            {/* <InfoIcon /> */}
         </div>
     );
 };

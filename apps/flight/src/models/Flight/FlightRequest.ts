@@ -1,11 +1,10 @@
-import { IATA_AirlineCodes } from '@/types/types';
-import { FlightItinerary, ViewMode } from './FlightEnum';
+import { AirlinesEnum, FlightItinerary, ViewMode } from './FlightEnum';
 
 export type FlightRequest = {};
 
 export interface FlightAvailabilitiesSearchRequest {
     body: {
-        source: IATA_AirlineCodes;
+        source: AirlinesEnum;
         viewMode: ViewMode;
         SessionId: string;
         AId: string;
@@ -34,8 +33,6 @@ export interface FlightCreateBookingRequest {
 }
 
 export interface FlightFareRulesRequest {
-    Aid: string;
-    CId?: string;
     AirlineCode: string;
     ClassName: string;
     LanguageCode: string;

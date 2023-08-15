@@ -15,7 +15,7 @@ interface IProps {}
 
 const HomePageView: FC<IProps> = (props) => {
     return (
-        <div className='container max-w-[1440px] mx-auto'>
+        <div className='container max-w-[1400px] mx-auto'>
             <Header />
             <AdsBanner />
             <div className='container max-w-[1200px] mx-auto -mt-[62px] relative z-[1]'>
