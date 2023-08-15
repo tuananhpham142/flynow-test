@@ -18,10 +18,10 @@ export type InitSessionData = {
 export type SessionModel = {
     SessionId: string;
     IsDomestic: boolean;
-    InitSessionData: InitSessionData;
+    InitSessionData: InitSessionData | null;
     Source: Array<AirlinesEnum>;
-    FlightData: FlightData;
-    FlightInfoSelected: FlightInfoSelected;
+    FlightData: FlightData | null;
+    FlightInfoSelected: FlightInfoSelected | null;
     PassengerInfo: Array<PassengerInfo>;
     FlightInfo: Array<FlightInfoModel>;
     ContactInfo: ContactInfo;

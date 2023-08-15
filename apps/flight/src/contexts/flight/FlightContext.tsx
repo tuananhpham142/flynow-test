@@ -1,16 +1,36 @@
-import React, { createContext, useReducer } from 'react';
+import { createContext, useReducer } from 'react';
 
 // types
-import type { Action, FlightProviderProps, FlightContextType, AggregateData } from './FlightContext.type';
+import type { Action, AggregateData, FlightContextType, FlightProviderProps } from './FlightContext.type';
 
 // enums
-import { FlightDispatchEnum } from './FlightContext.type';
 import { SessionModel } from '@/models/FlightSession/SessionModel';
+import { FlightDispatchEnum } from './FlightContext.type';
 
 // initial state
 const initialState: FlightContextType = {
     sessionId: '',
-    sessionData: undefined,
+    sessionData: {
+        SessionId: '',
+        IsDomestic: true,
+        InitSessionData: null,
+        Source: [],
+        FlightData: null,
+        FlightInfoSelected: null,
+        PassengerInfo: [],
+        FlightInfo: [],
+        ContactInfo: {
+            FullName: '',
+            Phone: '',
+            Email: '',
+            IdentityNo: '',
+            Address: '',
+            Note: '',
+        },
+        BookingCode: '',
+        AId: '',
+        CId: '',
+    },
     departureAggregate: {
         AirlineCode: [],
         GroupClass: [],

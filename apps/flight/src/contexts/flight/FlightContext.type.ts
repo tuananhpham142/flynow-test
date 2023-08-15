@@ -1,6 +1,5 @@
-import { FlattedFlight, FlightInfoSelected } from '@/models/Flight/FlightModel';
+import { FlattedFlight } from '@/models/Flight/FlightModel';
 import { SessionModel } from '@/models/FlightSession/SessionModel';
-import { InitSessionData } from '@/models/FlightSession/SessionResponse';
 
 // providers props
 export interface FlightProviderProps {
@@ -38,7 +37,7 @@ export type AggregateData = Record<AggregateKeys, Array<AggregateValue>>;
 export interface FlightContextType {
     // state
     sessionId: string;
-    sessionData?: SessionModel;
+    sessionData: SessionModel;
     departureAggregate: AggregateData;
     flightViewMode: FlightViewMode;
 

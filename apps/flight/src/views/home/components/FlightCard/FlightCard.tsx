@@ -13,8 +13,8 @@ import React, { useState } from 'react';
 import { getAirlineLogo } from '../Logos';
 
 // services
-import { useGetFareRuleQuery } from '@/services/flight/flightFareRule';
 import FlightContext from '@/contexts/flight/FlightContext';
+import { useGetFareRuleQuery } from '@/services/flight/flightFareRule';
 
 enum FlightDetailTabs {
     FLIGHT_DETAIL = 'FLIGHT_DETAIL',
@@ -32,10 +32,7 @@ const FlightCard = (props: Props) => {
     const { onSelectFlight, flight, isDisable, isLoadingFlight } = props;
     const { sessionData } = React.useContext(FlightContext);
 
-    if (!sessionData) return null;
-
     const [showDetail, setShowDetail] = useState(false);
-
     const [detailTab, setDetailTab] = useState<FlightDetailTabs>(FlightDetailTabs.FLIGHT_DETAIL);
     const handleChangeTabDetail = (val: FlightDetailTabs, event: React.SyntheticEvent) => {
         setDetailTab(val);
@@ -66,14 +63,11 @@ const FlightCard = (props: Props) => {
         DiffType: 'days',
     });
 
-    const { Adult, Children, Infant } = sessionData.InitSessionData;
-
     const adultPrice = flight.BaseAdult + flight.TaxAdult + flight.FeeAdult + flight.AirporFeetAdult;
-
     const childrenPrice = flight.BaseChild + flight.TaxChild + flight.FeeChild + flight.AirportFeeChild;
-
     const infantPrice = flight.BaseInf + flight.TaxInf + flight.FeeInf + flight.AirportFeeInf;
 
+    if (!sessionData) return null;
     return (
         <Card
             variant='border'
@@ -424,51 +418,71 @@ const FlightCard = (props: Props) => {
                                                 </tr>
                                                 <tr>
                                                     <td className='text-grey-800 text-left p-1.5'>Giá vé người lớn</td>
-                                                    <td className='text-grey-800 text-right p-1.5'>{Adult}</td>
+                                                    <td className='text-grey-800 text-right p-1.5'>
+                                                        {sessionData?.InitSessionData?.Adult}
+                                                    </td>
                                                     <td className='text-grey-800 text-right p-1.5'>
                                                         {currencyFormat(adultPrice)}
                                                     </td>
                                                     <td className='text-grey-800 text-right p-1.5'>
-                                                        {currencyFormat(adultPrice * Adult)}
+                                                        {currencyFormat(
+                                                            adultPrice * (sessionData?.InitSessionData?.Adult || 0),
+                                                        )}
                                                     </td>
                                                 </tr>
-                                                {Boolean(Children) && (
+                                                {Boolean(sessionData?.InitSessionData?.Children) && (
                                                     <tr>
                                                         <td className='text-grey-800 text-left p-1.5'>Giá vé trẻ em</td>
-                                                        <td className='text-grey-800 text-right p-1.5'>{Children}</td>
+                                                        <td className='text-grey-800 text-right p-1.5'>
+                                                            {sessionData?.InitSessionData?.Children}
+                                                        </td>
                                                         <td className='text-grey-800 text-right p-1.5'>
                                                             {currencyFormat(childrenPrice)}
                                                         </td>
                                                         <td className='text-grey-800 text-right p-1.5'>
-                                                            {currencyFormat(childrenPrice * Children)}
+                                                            {currencyFormat(
+                                                                childrenPrice *
+                                                                    (sessionData?.InitSessionData?.Children || 0),
+                                                            )}
                                                         </td>
                                                     </tr>
                                                 )}
-                                                {Boolean(Infant) && (
+                                                {Boolean(sessionData?.InitSessionData?.Infant) && (
                                                     <tr>
                                                         <td className='text-grey-800 text-left p-1.5'>Giá vé em bé</td>
-                                                        <td className='text-grey-800 text-right p-1.5'>{Infant}</td>
+                                                        <td className='text-grey-800 text-right p-1.5'>
+                                                            {sessionData?.InitSessionData?.Infant}
+                                                        </td>
                                                         <td className='text-grey-800 text-right p-1.5'>
                                                             {currencyFormat(infantPrice)}
                                                         </td>
                                                         <td className='text-grey-800 text-right p-1.5'>
-                                                            {currencyFormat(infantPrice * Infant)}
+                                                            {currencyFormat(
+                                                                infantPrice *
+                                                                    (sessionData?.InitSessionData?.Infant || 0),
+                                                            )}
                                                         </td>
                                                     </tr>
                                                 )}
                                                 <tr>
                                                     <td className='text-grey-800 text-left p-1.5 font-bold'>Tổng</td>
                                                     <td className='text-grey-800 text-right p-1.5 font-bold'>
-                                                        {Adult + Children + Infant} khách
+                                                        {sessionData?.InitSessionData?.Adult ||
+                                                            0 +
+                                                                (sessionData?.InitSessionData?.Children || 0) +
+                                                                (sessionData?.InitSessionData?.Infant || 0)}{' '}
+                                                        khách
                                                     </td>
                                                     <td className='text-grey-800 text-right p-1.5 font-bold text-warning'>
                                                         {/* 4,260,000₫ */}
                                                     </td>
                                                     <td className='text-grey-800 text-right p-1.5 font-bold text-warning'>
                                                         {currencyFormat(
-                                                            adultPrice * Adult +
-                                                                childrenPrice * Children +
-                                                                infantPrice * Infant,
+                                                            adultPrice * (sessionData?.InitSessionData?.Adult || 0) +
+                                                                childrenPrice *
+                                                                    (sessionData?.InitSessionData?.Children || 0) +
+                                                                infantPrice *
+                                                                    (sessionData?.InitSessionData?.Infant || 0),
                                                         )}
                                                     </td>
                                                 </tr>
