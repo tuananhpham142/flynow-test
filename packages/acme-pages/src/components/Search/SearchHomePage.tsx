@@ -10,10 +10,17 @@ const SearchAccommodation = dynamic(() => import('./Accommodation'), {
     ssr: false,
 });
 
-interface IProps {}
+interface IProps {
+    onSubmit: (data: any) => void;
+    isLoading: boolean;
+    initialData: any;
+}
 
 const SearchHomePage: FC<IProps> = (props) => {
+    const { onSubmit, isLoading, initialData } = props;
+
     const [focus, setFocus] = useState<1 | 2 | 3 | 4>(1);
+
     return (
         <div className='rounded-lg'>
             <div className='flex items-center w-fit bg-white rounded-t-[24px] pt-5 px-6 gap-10'>
@@ -22,7 +29,7 @@ const SearchHomePage: FC<IProps> = (props) => {
             {focus === 1 && (
                 <Suspense fallback={<FlightSearchSkeleton />}>
                     <div className='flex flex-col bg-white p-6 rounded-b-[24px] gap-2 shadow'>
-                        <SearchFlight />
+                        <SearchFlight onSubmit={onSubmit} isLoading={isLoading} initialData={initialData} />
                     </div>
                 </Suspense>
             )}
