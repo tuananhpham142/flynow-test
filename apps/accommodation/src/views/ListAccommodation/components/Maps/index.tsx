@@ -1,7 +1,7 @@
 'use client';
+import { MapsCoords } from '@/types/Maps/MapsModel';
 import GoogleMap, { ChangeEventValue } from 'google-map-react';
 import { FC } from 'react';
-import { MapsCoords } from 'types/Maps/MapsModel';
 import MapsMaker from './MapsMaker';
 
 interface IProps {}
