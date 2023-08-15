@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 // components
 import { ListRenderer } from '@acme/design-system';
 import PlanTicketCard, { FlightCardSkeleton } from '../FlightCard/FlightCard';
@@ -7,10 +7,10 @@ import PlanTicketCard, { FlightCardSkeleton } from '../FlightCard/FlightCard';
 import { flightSelect } from '@/services';
 
 // types
-import type { FlattedFlight } from '@/models/Flight/FlightModel';
-import { useOnScreen } from '@/hooks/useOnScreen';
 import FlightContext from '@/contexts/flight/FlightContext';
+import { useOnScreen } from '@/hooks/useOnScreen';
 import { FlightItinerary } from '@/models/Flight/FlightEnum';
+import type { FlattedFlight } from '@/models/Flight/FlightModel';
 
 type Props = {
     flights: Array<FlattedFlight>;

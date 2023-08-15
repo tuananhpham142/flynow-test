@@ -10,27 +10,7 @@ import { FlightDispatchEnum } from './FlightContext.type';
 // initial state
 const initialState: FlightContextType = {
     sessionId: '',
-    sessionData: {
-        SessionId: '',
-        IsDomestic: true,
-        InitSessionData: null,
-        Source: [],
-        FlightData: null,
-        FlightInfoSelected: null,
-        PassengerInfo: [],
-        FlightInfo: [],
-        ContactInfo: {
-            FullName: '',
-            Phone: '',
-            Email: '',
-            IdentityNo: '',
-            Address: '',
-            Note: '',
-        },
-        BookingCode: '',
-        AId: '',
-        CId: '',
-    },
+    sessionData: null,
     departureAggregate: {
         AirlineCode: [],
         GroupClass: [],

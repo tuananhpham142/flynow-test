@@ -37,7 +37,7 @@ export type AggregateData = Record<AggregateKeys, Array<AggregateValue>>;
 export interface FlightContextType {
     // state
     sessionId: string;
-    sessionData: SessionModel;
+    sessionData: SessionModel | null;
     departureAggregate: AggregateData;
     flightViewMode: FlightViewMode;
 
