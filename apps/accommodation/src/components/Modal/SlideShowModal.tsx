@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable jsx-a11y/alt-text */
 'use client';
 import { FreeMode, Modal, Navigation, SwiperReact, Thumbs } from '@acme/design-system';
+import Image from 'next/image';
 import { FC, useState } from 'react';
 
 interface IProps {
@@ -34,7 +33,8 @@ const SlideShowModal: FC<IProps> = (props) => {
                     >
                         <SwiperReact.SwiperSlide>
                             <div className='h-full w-4/5 mx-auto'>
-                                <img
+                                <Image
+                                    alt='nature-1'
                                     src='https://swiperjs.com/demos/images/nature-1.jpg'
                                     className={'h-full w-full object-cover'}
                                 />
@@ -42,7 +42,8 @@ const SlideShowModal: FC<IProps> = (props) => {
                         </SwiperReact.SwiperSlide>
                         <SwiperReact.SwiperSlide>
                             <div className='h-full w-4/5 mx-auto'>
-                                <img
+                                <Image
+                                    alt='nature-2'
                                     src='https://swiperjs.com/demos/images/nature-2.jpg'
                                     className={'h-full w-full object-cover'}
                                 />
@@ -50,7 +51,8 @@ const SlideShowModal: FC<IProps> = (props) => {
                         </SwiperReact.SwiperSlide>
                         <SwiperReact.SwiperSlide>
                             <div className='h-full w-4/5 mx-auto'>
-                                <img
+                                <Image
+                                    alt='nature-3'
                                     src='https://swiperjs.com/demos/images/nature-3.jpg'
                                     className={'h-full w-full object-cover'}
                                 />
@@ -58,7 +60,8 @@ const SlideShowModal: FC<IProps> = (props) => {
                         </SwiperReact.SwiperSlide>
                         <SwiperReact.SwiperSlide>
                             <div className='h-full w-4/5 mx-auto'>
-                                <img
+                                <Image
+                                    alt='nature-4'
                                     src='https://swiperjs.com/demos/images/nature-4.jpg'
                                     className={'h-full w-full object-cover'}
                                 />
@@ -66,7 +69,8 @@ const SlideShowModal: FC<IProps> = (props) => {
                         </SwiperReact.SwiperSlide>
                         <SwiperReact.SwiperSlide>
                             <div className='h-full w-4/5 mx-auto'>
-                                <img
+                                <Image
+                                    alt='nature-5'
                                     src='https://swiperjs.com/demos/images/nature-5.jpg'
                                     className={'h-full w-full object-cover'}
                                 />
@@ -74,7 +78,7 @@ const SlideShowModal: FC<IProps> = (props) => {
                         </SwiperReact.SwiperSlide>
                     </SwiperReact.Swiper>
                     <SwiperReact.Swiper
-                        onSwiper={(swiper) => setThumbsSwiper(swiper)}
+                        onSwiper={setThumbsSwiper}
                         loop={true}
                         spaceBetween={10}
                         slidesPerView={4}
@@ -84,19 +88,19 @@ const SlideShowModal: FC<IProps> = (props) => {
                         className='slideModal h-1/5 py-2'
                     >
                         <SwiperReact.SwiperSlide>
-                            <img src='https://swiperjs.com/demos/images/nature-1.jpg' />
+                            <Image alt='nature-1' src='https://swiperjs.com/demos/images/nature-1.jpg' />
                         </SwiperReact.SwiperSlide>
                         <SwiperReact.SwiperSlide>
-                            <img src='https://swiperjs.com/demos/images/nature-2.jpg' />
+                            <Image alt='nature-2' src='https://swiperjs.com/demos/images/nature-2.jpg' />
                         </SwiperReact.SwiperSlide>
                         <SwiperReact.SwiperSlide>
-                            <img src='https://swiperjs.com/demos/images/nature-3.jpg' />
+                            <Image alt='nature-3' src='https://swiperjs.com/demos/images/nature-3.jpg' />
                         </SwiperReact.SwiperSlide>
                         <SwiperReact.SwiperSlide>
-                            <img src='https://swiperjs.com/demos/images/nature-4.jpg' />
+                            <Image alt='nature-4' src='https://swiperjs.com/demos/images/nature-4.jpg' />
                         </SwiperReact.SwiperSlide>
                         <SwiperReact.SwiperSlide>
-                            <img src='https://swiperjs.com/demos/images/nature-5.jpg' />
+                            <Image alt='nature-5' src='https://swiperjs.com/demos/images/nature-5.jpg' />
                         </SwiperReact.SwiperSlide>
                     </SwiperReact.Swiper>
                 </div>

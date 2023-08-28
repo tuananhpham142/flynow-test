@@ -32,6 +32,23 @@ export interface FlightAddPassengerRequest {
     };
 }
 
+export interface FlightUpdatePassengerAndContactRequest {
+    body: {
+        SessionId: string;
+        AId: string;
+        CId?: string;
+        PassengerFlightInfo: PassengerInfo[];
+        ContactFlightInfo: {
+            FullName: string;
+            Phone: string;
+            Email: string;
+            IdentityNo?: string;
+            Address?: string;
+            Note?: string;
+        };
+    };
+}
+
 export interface FlightAncillaryRequest {}
 
 export interface FlightCreateBookingRequest {
@@ -92,4 +109,20 @@ export interface FlightGetBaggagesRequest {
     Itinerary: FlightItinerary;
     FlightSession: string;
     FareOptionSession: string;
+}
+
+export interface FlightUpdatePassengerBaggageRequest {
+    body: {
+        SessionId: string;
+        AId: string;
+        CId?: string;
+        PassengerFlightInfo: Array<{
+            PassengerIndex: number;
+            FlightNumber: string;
+            Baggage: string;
+            Price: number;
+            PNR?: string;
+            TicketNumber?: string;
+        }>;
+    };
 }

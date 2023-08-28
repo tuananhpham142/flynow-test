@@ -32,7 +32,7 @@
     --card-border-rgb: 131, 134, 135;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
     :root {
         --foreground-rgb: 255, 255, 255;
         --background-start-rgb: 0, 0, 0;
@@ -55,7 +55,7 @@
         --card-rgb: 100, 100, 100;
         --card-border-rgb: 200, 200, 200;
     }
-}
+} */
 
 * {
     box-sizing: border-box;
@@ -108,4 +108,22 @@ a {
         text-overflow: ellipsis;
         white-space: normal;
     }
+}
+
+::-webkit-scrollbar-track {
+    /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+    border-radius: 10px;
+    background-color: #f4f6f8;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+    background-color: #f4f6f8;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+    background-color: #dfe3e8;
 }

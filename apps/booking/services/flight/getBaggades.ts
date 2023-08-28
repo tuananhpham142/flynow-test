@@ -2,7 +2,7 @@ import { useQuery } from '@acme/api';
 import { FlightGetBaggagesRequest } from 'models/Flight/FlightRequest';
 import { FlightGetBaggagesResponse } from 'models/Flight/FlightResponse';
 
-import { queryString } from '@acme/utils/common/query-string.utils';
+import { queryString } from '@acme/utils';
 
 export const useGetBaggadeQuery = (request: FlightGetBaggagesRequest) => {
     const query = queryString.stringify(request);

@@ -16,6 +16,6 @@ export interface ButtonProps
     fullWidth?: boolean;
     isLoading?: boolean;
     style?: React.CSSProperties;
-    color?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
+    color?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'muted';
     rounded?: BorderRadius;
 }

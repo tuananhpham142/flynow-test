@@ -15,6 +15,10 @@ export interface FlightUpdateContactResponse extends SessionModel {}
 
 export interface FlightGetSessionResponse extends SessionModel {}
 
+export interface FlightUpdatePassengerBaggageResponse extends SessionModel {}
+
+export interface FlightUpdatePassengerAndContactResponse extends SessionModel {}
+
 export interface FlightGetFareRuleResponse {
     AirlineCode: string;
     ClassCode: string;

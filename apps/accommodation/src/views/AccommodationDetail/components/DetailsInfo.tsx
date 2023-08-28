@@ -1,13 +1,22 @@
 'use client';
 import { Typography, IconButton } from '@acme/design-system';
 import React, { FC } from 'react';
+import { TagModel } from '@/types/Tag/TagModel';
 
-interface IProps {}
+interface IProps {
+    isPreviewPage?: boolean;
+    amenities: Array<TagModel>;
+    extraInformation: string;
+    checkIn: string;
+    checkOut: string;
+    rules: Array<TagModel>;
+    policies: Array<TagModel>;
+}
 
 const DetailsInfo: FC<IProps> = (props) => {
-    const {} = props;
+    const { isPreviewPage, amenities, extraInformation, checkIn, checkOut, policies, rules } = props;
 
-    const renderUtilitiesItem = () => {
+    const renderAmenitiesItem = () => {
         return (
             <div className='flex items-center gap-1'>
                 <i>icon</i>
@@ -24,19 +33,7 @@ const DetailsInfo: FC<IProps> = (props) => {
                 </Typography>
                 <div className='border-b border-grey-300 my-4' />
                 <div className='grid grid-rows-4 grid-flow-col gap-x-8 gap-y-4'>
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
-                    {renderUtilitiesItem()}
+                    {amenities.length ? amenities.map(() => renderAmenitiesItem()) : 'Chưa có thông tin'}
                 </div>
             </div>
             <div>
@@ -44,9 +41,7 @@ const DetailsInfo: FC<IProps> = (props) => {
                     Thông tin thêm
                 </Typography>
                 <div className='border-b border-grey-300 my-4' />
-                <Typography className='whitespace-pre-wrap'>
-                    {`Nếu đặt phòng quá muộn, nhất là khi sát với những ngày nghỉ lễ tết khi có rất nhiều người đi du lịch bạn sẽ phải trả những cái giá đắt hơn rất nhiều so với thông thường.\nDù cho tất cả thông tin đã được viết đầy đủ trên website, bạn cũng đừng ngần ngại hỏi chủ khách sạn hay các nhân viên tiếp tân những gì bạn còn chưa rõ về phòng nghỉ để có được thông tin chính xác nhất.\nHiện có rất nhiều web lừa đảo chuyên cung cấp các dịch vụ đặt phòng khách sạn ảo. Để tránh bị lừa, tốt nhất bạn nên đặt phòng qua chính website của khách sạn đó.`}
-                </Typography>
+                <Typography className='whitespace-pre-wrap'>{extraInformation || 'Chưa có thông tin'}</Typography>
             </div>
             <div>
                 <Typography htmlTag={'h5'} variant={'h5'}>
@@ -60,7 +55,7 @@ const DetailsInfo: FC<IProps> = (props) => {
                         </IconButton>
                         <div>
                             <Typography variant={'body14'}>Giờ nhận phòng</Typography>
-                            <Typography variant={'subtitle14'}>14 : 00</Typography>
+                            <Typography variant={'subtitle14'}>{checkIn}</Typography>
                         </div>
                     </div>
                     <div className='flex items-center gap-2'>
@@ -69,16 +64,24 @@ const DetailsInfo: FC<IProps> = (props) => {
                         </IconButton>
                         <div>
                             <Typography variant={'body14'}>Giờ trả phòng</Typography>
-                            <Typography variant={'subtitle14'}>14 : 00</Typography>
+                            <Typography variant={'subtitle14'}>{checkOut}</Typography>
                         </div>
                     </div>
                 </div>
-                <div>
+                <div className={'mb-3'}>
                     <Typography variant={'subtitle16'} className='mb-2'>
-                        Chính sách trẻ em
+                        Nội quy
                     </Typography>
                     <Typography className='whitespace-pre-wrap'>
-                        {`Khách lớn hơn 11 tuổi sẽ được xem như người lớn.\nTrẻ em từ 0 tuổi đến 11 tuổi lưu trú có thể phát sinh phụ thu.\nQuý khách hàng vui lòng nhập đúng số lượng khách và tuổi để có giá chính xác.`}
+                        {rules.length ? rules.map(() => renderAmenitiesItem()) : 'Chưa có thông tin'}
+                    </Typography>
+                </div>
+                <div>
+                    <Typography variant={'subtitle16'} className='mb-2'>
+                        Chính sách
+                    </Typography>
+                    <Typography className='whitespace-pre-wrap'>
+                        {policies.length ? policies.map(() => renderAmenitiesItem()) : 'Chưa có thông tin'}
                     </Typography>
                 </div>
             </div>

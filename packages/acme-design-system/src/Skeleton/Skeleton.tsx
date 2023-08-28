@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { SkeletonProps } from './Skeleton.type';
 
 const Skeleton: React.FC<SkeletonProps> = (props) => {
-    const { width, height, variant = 'rounded', customClasses } = props;
+    const { width, height, variant = 'rounded', customClasses, children } = props;
 
     const skeletonClassesGenerator = () => {
         const variants = {
@@ -16,12 +16,15 @@ const Skeleton: React.FC<SkeletonProps> = (props) => {
 
     return (
         <div
+            role='status'
             style={{
                 width: width,
                 height: height,
             }}
             className={skeletonClassesGenerator()}
-        ></div>
+        >
+            {children}
+        </div>
     );
 };
 

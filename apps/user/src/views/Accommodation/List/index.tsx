@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import OrderPlacedCard from '@/components/Cards/OrderPlacedCard';
 import { Typography, Button, Chip } from '@acme/design-system';
+import Filters from '@/views/Accommodation/List/components/Filters';
 
 interface IProps {}
 
@@ -26,6 +27,7 @@ const ListBookingPage: FC<IProps> = (props) => {
                 <Chip>Thành công</Chip>
                 <Chip>Thất bại</Chip>
             </div>
+            <Filters />
             <div className='flex flex-col gap-4'>
                 <OrderPlacedCard />
                 <OrderPlacedCard />

@@ -16,12 +16,11 @@ export type PassengerInfo = {
 export type PassengerFlightInfoModel = {
     PassengerIndex: number;
     PassengerFullName: string;
-    FlightInfo: [
-        {
-            FlightNumber: string;
-            PNR: string;
-            TicketNumber: string;
-            Baggage: string;
-        },
-    ];
+    FlightInfo: Array<{
+        FlightNumber: string;
+        PNR: string;
+        TicketNumber: string;
+        Baggage: string;
+        Price: number;
+    }>;
 };

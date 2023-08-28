@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -38,7 +39,9 @@ const ListProduct = (props: Props) => {
                             <Link key={`product_${i}`} href={`/product/${prod.Id}`} prefetch={false}>
                                 <div className='max-w-sm bg-white border border-grey-200 rounded-lg shadow dark:bg-grey-800 dark:border-grey-700'>
                                     <a href='#'>
-                                        <img
+                                        <Image
+                                            width={80}
+                                            height={80}
                                             className='rounded-t-lg'
                                             src={`https://picsum.photos/500.webp?random=${i}`}
                                             alt=''

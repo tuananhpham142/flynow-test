@@ -21,15 +21,19 @@ const Button: FC<ButtonProps> = (props) => {
 
     const rootStyles = `inline-flex items-center justify-center duration-150 cursor-pointer`;
 
-    const mainColor = color || 'primary';
+    const mainColor: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'muted' = color || 'primary';
 
-    const variants = {
+    const variants: Record<
+        'contained' | 'outline' | 'text',
+        Record<'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'muted', string>
+    > = {
         contained: {
             primary: `bg-primary text-grey-100 fill-grey-100 hover:bg-primary-dark focus:bg-primary-darker`,
             secondary: `bg-secondary text-grey-100 fill-grey-100 hover:bg-secondary-dark focus:bg-secondary-darker`,
             danger: `bg-danger text-grey-100 fill-grey-100 hover:bg-danger-dark focus:bg-danger-darker`,
             success: `bg-success text-grey-100 fill-grey-100 hover:bg-success-dark focus:bg-success-darker`,
             warning: `bg-warning text-grey-100 fill-grey-100 hover:bg-warning-dark focus:bg-warning-darker`,
+            muted: '',
         },
         outline: {
             primary: `bg-grey-100 text-primary fill-primary border border-primary border-solid hover:bg-primary-lighter focus:bg-primary-lighter focus:text-primary-darker focus:border-primary-darker`,
@@ -37,6 +41,7 @@ const Button: FC<ButtonProps> = (props) => {
             danger: `bg-grey-100 text-danger fill-danger border border-danger border-solid hover:bg-danger-lighter focus:bg-danger-lighter focus:text-danger-darker focus:border-danger-darker`,
             success: `bg-grey-100 text-success fill-success border border-success border-solid hover:bg-success-lighter focus:bg-success-lighter focus:text-success-darker focus:border-success-darker`,
             warning: `bg-grey-100 text-warning fill-warning border border-warning border-solid hover:bg-warning-lighter focus:bg-warning-lighter focus:text-warning-darker focus:border-warning-darker`,
+            muted: '',
         },
         text: {
             primary: `text-primary fill-primary hover:bg-primary-lighter focus:text-primary-darker focus:bg-primary-lighter`,
@@ -44,12 +49,13 @@ const Button: FC<ButtonProps> = (props) => {
             danger: `text-danger fill-danger hover:bg-danger-lighter focus:text-danger-darker focus:bg-danger-lighter`,
             success: `text-success fill-success hover:bg-success-lighter focus:text-success-darker focus:bg-success-lighter`,
             warning: `text-warning fill-warning hover:bg-warning-lighter focus:text-warning-darker focus:bg-warning-lighter`,
+            muted: `text-grey-500 fill-grey-500 hover:bg-grey-300 focus:text-grey-700 focus:bg-grey-300`,
         },
     };
 
     const sizes = {
-        sm: 'text-sm font-normal py-0.5 px-4',
-        md: 'text-sm font-bold py-1.5 px-4',
+        sm: 'text-sm font-normal py-0.5 px-2',
+        md: 'text-sm font-bold py-1.5 px-3',
         lg: 'text-base font-bold py-2 px-4',
         xl: 'text-base font-bold py-3 px-6',
     };

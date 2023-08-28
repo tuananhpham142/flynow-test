@@ -1,4 +1,5 @@
 import { IconButton, Modal, Typography } from '@acme/design-system';
+import Image from 'next/image';
 import { FC } from 'react';
 
 interface IProps {
@@ -33,7 +34,7 @@ const RoomDetailModal: FC<IProps> = (props) => {
                     <Typography htmlTag={'h4'} variant={'h4'} className={'!text-grey-600'}>
                         Classic Double Room
                     </Typography>
-                    <img
+                    <Image
                         src={'https://picsum.photos/700'}
                         alt={'X'}
                         width={700}

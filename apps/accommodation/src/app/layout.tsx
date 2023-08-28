@@ -18,7 +18,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <html lang='en'>
             <body className={`${inter.className} bg-background`}>
                 <Header />
-                <div className='container max-w-[1400px] mx-auto px-6'>{children}</div>
+                {children}
                 <Footer />
             </body>
         </html>

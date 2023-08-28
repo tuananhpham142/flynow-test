@@ -8,7 +8,7 @@ import FlightContext from '@/contexts/flight/FlightContext';
 type Props = {};
 
 const SelectedFlightCard = (props: Props) => {
-    const { sessionData } = React.useContext(FlightContext);
+    const { sessionData, flightViewMode } = React.useContext(FlightContext);
 
     const departureCardInfo = sessionData?.FlightInfoSelected?.find((item) => item.Index === 1);
 
@@ -27,6 +27,10 @@ const SelectedFlightCard = (props: Props) => {
     const firstSegment = departureCardInfo.ListSegment[0];
 
     const lastSegment = [...departureCardInfo.ListSegment].pop() || firstSegment;
+
+    if (flightViewMode === 1) {
+        return null;
+    }
 
     return (
         <div className='relative w-full h-[112px] flex bg-primary-light rounded-lg text-white before:absolute before:h-[20px] before:w-[20px] before:bg-[#fbfbfb] before:rounded-full before:left-[67%] before:-top-[10px] before:-translate-x-[10px] after:absolute after:h-[20px] after:w-[20px] after:bg-[#fbfbfb] after:rounded-full after:left-[67%] after:-bottom-[10px] after:-translate-x-[10px]'>

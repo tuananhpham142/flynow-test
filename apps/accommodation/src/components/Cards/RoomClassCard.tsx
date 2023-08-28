@@ -1,12 +1,15 @@
 import React, { FC } from 'react';
-import { Card, Typography } from '@acme/design-system';
+import { Card, Typography, Skeleton } from '@acme/design-system';
 import Image from 'next/image';
 import RoomTypeOption from './RoomTypeOption';
+import { AcdDetailResponse } from '@/types/Accommodation/AcdModel';
 
-interface IProps {}
+interface IProps {
+    roomClass?: AcdDetailResponse;
+}
 
 const RoomClassCard: FC<IProps> = (props) => {
-    const {} = props;
+    const { roomClass } = props;
 
     return (
         <Card
@@ -38,6 +41,7 @@ const RoomClassCard: FC<IProps> = (props) => {
                                 <i className={'w-4 h-4 mr-1'}>icon</i>Hướng biển
                             </Typography>
                         </div>
+
                         <RoomTypeOption />
                         <RoomTypeOption />
                         <RoomTypeOption />

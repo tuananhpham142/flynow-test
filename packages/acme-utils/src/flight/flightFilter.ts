@@ -1,4 +1,5 @@
 import { dayjs } from '@acme/design-system';
+import { log } from 'console';
 type FilterKey = string;
 
 type FilterEqual = Array<string | number | boolean>;
@@ -31,7 +32,7 @@ export const flightFilter = <FilterKeyType extends string>(
     const keysWithMinMax: Array<keyof any> = ['TotalPrice', 'StartDate', 'EndDate'];
     const filteredData = data.filter((item) => {
         for (let key in filter) {
-            const itemValue = item[key];
+            let itemValue = item[key];
 
             if (itemValue === undefined) {
                 return false;
@@ -41,22 +42,24 @@ export const flightFilter = <FilterKeyType extends string>(
                 const minValue = filterValue['min'];
                 const maxValue = filterValue['max'];
 
-                // datetime filter mix max
-                if (typeof itemValue === 'string' && dayjs(itemValue).isValid()) {
-                    const itemTime = dayjs(itemValue);
-                    const minTime = dayjs(minValue);
-                    const maxTime = dayjs(maxValue);
+                if (['StartDate', 'EndDate'].includes(key)) {
+                    const hoursToCompare = dayjs(itemValue).hour();
+                    const minutesToCompare = dayjs(itemValue).minute();
 
-                    if (minTime.isValid() && maxTime.isValid()) {
-                        if (itemTime.isBefore(minTime) || itemTime.isAfter(maxTime)) {
+                    if (minValue !== null) {
+                        if (
+                            hoursToCompare < Number(minValue) ||
+                            (hoursToCompare === minValue && minutesToCompare < 0)
+                        ) {
                             return false;
                         }
-                    } else if (minTime.isValid()) {
-                        if (itemTime.isBefore(minTime)) {
-                            return false;
-                        }
-                    } else if (maxTime.isValid()) {
-                        if (itemTime.isAfter(maxTime)) {
+                    }
+
+                    if (maxValue !== null) {
+                        if (
+                            hoursToCompare > Number(maxValue) ||
+                            (hoursToCompare === maxValue && minutesToCompare > 0)
+                        ) {
                             return false;
                         }
                     }
@@ -72,25 +75,6 @@ export const flightFilter = <FilterKeyType extends string>(
                 const filterValue = filter[key] as FilterEqual;
                 if (Array.isArray(filterValue) && !filterValue.includes(itemValue)) return false;
             }
-
-            // if (item[key] === undefined) {
-            //     return false;
-            // } else if (keysWithMinMax.includes(key)) {
-            //     // greater and less filter
-            //     const filterValue = filter[key] as FilterGreaterAndLess;
-            //     const minValue = filterValue['min'];
-            //     const maxValue = filterValue['max'];
-
-            //     if (minValue !== null && item[key] < minValue) {
-            //         return false;
-            //     }
-            //     if (maxValue !== null && item[key] > maxValue) {
-            //         return false;
-            //     }
-            // } else {
-            //     const filterValue = filter[key] as FilterEqual;
-            //     if (Array.isArray(filterValue) && !filterValue.includes(item[key])) return false;
-            // }
         }
         return true;
     });

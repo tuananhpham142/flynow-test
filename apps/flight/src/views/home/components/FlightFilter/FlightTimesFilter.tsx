@@ -46,33 +46,45 @@ const FlightTimesFilter = (props: Props) => {
     const [starTimeFilter, setStartTimeFilter] = useState<FilterGreaterAndLess>();
     const [endTimeFilter, setEndTimeFilter] = useState<FilterGreaterAndLess>();
 
-    const departureDate = sessionData?.InitSessionData?.DepartureDate;
-    const returnDate = sessionData?.InitSessionData?.ReturnDate;
+    // const isDisabledStartFilter = (minHours: number, maxHours: number) => {
+    //     if (!sessionData) return true;
+    //     const { FlightData } = sessionData;
+    //     const { DepartureFlights } = FlightData;
+
+    //     return DepartureFlights.some((flight) => {
+    //         const { StartDate } = flight;
+    //         const hoursToCheck = dayjs(StartDate).hour();
+    //         return hoursToCheck >= minHours && hoursToCheck <= maxHours;
+    //     });
+    // };
 
     const handleStartTimeFilter = (checked: boolean, minHour: number, maxHour: number) => {
-        const minTime = dayjs(departureDate)
-            .set('hour', minHour)
-            .set('minute', 0)
-            .set('second', 0)
-            .format('YYYY-MM-DDTHH:mm:ss');
-        const maxTime = dayjs(departureDate)
-            .set('hour', maxHour)
-            .set('minute', 0)
-            .set('second', 0)
-            .format('YYYY-MM-DDTHH:mm:ss');
-
         if (checked) {
             setStartTimeFilter({
-                min: minTime,
-                max: maxTime,
+                min: minHour,
+                max: maxHour,
             });
         } else {
             setStartTimeFilter(undefined);
         }
     };
 
+    const handleEndTimeFilter = (checked: boolean, minHour: number, maxHour: number) => {
+        if (checked) {
+            setEndTimeFilter({
+                min: minHour,
+                max: maxHour,
+            });
+        } else {
+            setEndTimeFilter(undefined);
+        }
+    };
+
     const handleResetStartTimeFilter = () => {
         setStartTimeFilter(undefined);
+    };
+    const handleResetEndTimeFilter = () => {
+        setEndTimeFilter(undefined);
     };
 
     useEffect(() => {
@@ -91,37 +103,83 @@ const FlightTimesFilter = (props: Props) => {
         }
     }, [starTimeFilter]);
 
-    const isChecked = (minHour: number, maxHour: number) => {
-        if (!starTimeFilter) return false;
-        const minTime = dayjs(starTimeFilter.min);
-        const maxTime = dayjs(starTimeFilter.max);
-        if (maxHour === 24) {
-            return minTime.hour() === minHour && maxTime.hour() === 0;
+    useEffect(() => {
+        if (endTimeFilter) {
+            onFilter((filter) => ({
+                ...filter,
+                EndDate: endTimeFilter,
+            }));
+        } else {
+            onFilter((filter) => {
+                delete filter.EndDate;
+                return {
+                    ...filter,
+                };
+            });
         }
-        return minTime.hour() === minHour && maxTime.hour() === maxHour;
+    }, [endTimeFilter]);
+
+    const isStartFilterChecked = (minHour: number, maxHour: number) => {
+        if (!starTimeFilter) return false;
+        const minTime = starTimeFilter.min;
+        const maxTime = starTimeFilter.max;
+        return minTime === minHour && maxTime === maxHour;
     };
+
+    const isEndFilterChecked = (minHour: number, maxHour: number) => {
+        if (!endTimeFilter) return false;
+        const minTime = endTimeFilter.min;
+        const maxTime = endTimeFilter.max;
+        return minTime === minHour && maxTime === maxHour;
+    };
+
     return (
-        <div className='flex flex-col gap-1'>
-            <div className='flex justify-between'>
-                <Typography variant='subtitle16'>Thời gian cất cánh</Typography>
-                <IconButton onClick={handleResetStartTimeFilter} size='sm' variant='text'>
-                    <i className='icon icon-back text-xl' />
-                </IconButton>
+        <>
+            <div className='flex flex-col gap-1'>
+                <div className='flex justify-between'>
+                    <Typography variant='subtitle16'>Thời gian cất cánh</Typography>
+                    <IconButton onClick={handleResetStartTimeFilter} size='sm' variant='text'>
+                        <i className='icon icon-back text-xl' />
+                    </IconButton>
+                </div>
+                <div className='flex flex-col gap-1 px-1'>
+                    {timesFilter.map((time, index) => (
+                        <Checkbox
+                            key={`TIME_${index}`}
+                            circle
+                            onChange={(e) => {
+                                handleStartTimeFilter(e.target.checked, time.value.min, time.value.max);
+                            }}
+                            // disabled={isDisabledStartFilter(time.value.min, time.value.max)}
+                            checked={isStartFilterChecked(time.value.min, time.value.max)}
+                            label={time.label}
+                        />
+                    ))}
+                </div>
             </div>
-            <div className='flex flex-col gap-1 px-1'>
-                {timesFilter.map((time, index) => (
-                    <Checkbox
-                        key={`TIME_${index}`}
-                        circle
-                        onChange={(e) => {
-                            handleStartTimeFilter(e.target.checked, time.value.min, time.value.max);
-                        }}
-                        checked={isChecked(time.value.min, time.value.max)}
-                        label={time.label}
-                    />
-                ))}
+
+            <div className='flex flex-col gap-1'>
+                <div className='flex justify-between'>
+                    <Typography variant='subtitle16'>Thời gian hạ cánh</Typography>
+                    <IconButton onClick={handleResetEndTimeFilter} size='sm' variant='text'>
+                        <i className='icon icon-back text-xl' />
+                    </IconButton>
+                </div>
+                <div className='flex flex-col gap-1 px-1'>
+                    {timesFilter.map((time, index) => (
+                        <Checkbox
+                            key={`TIME_${index}`}
+                            circle
+                            onChange={(e) => {
+                                handleEndTimeFilter(e.target.checked, time.value.min, time.value.max);
+                            }}
+                            checked={isEndFilterChecked(time.value.min, time.value.max)}
+                            label={time.label}
+                        />
+                    ))}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

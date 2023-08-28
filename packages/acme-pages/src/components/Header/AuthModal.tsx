@@ -1,8 +1,12 @@
+import { Modal, TabPane, Tabs, Tooltip } from '@acme/design-system';
 import React, { useState } from 'react';
-import { Button, Checkbox, Input, Modal, TabPane, Tabs, Tooltip } from '@acme/design-system';
+import { UserInfo } from '.';
+import LoginForm from '../Auth/LoginForm';
+import RegisterForm from '../Auth/RegisterForm';
 type Props = {
     visible: boolean;
     onClose: (booleanValue: boolean) => void;
+    onLoginSuccess: (data: UserInfo) => void;
 };
 
 enum AuthTabs {
@@ -11,12 +15,13 @@ enum AuthTabs {
 }
 
 const AuthModal = (props: Props) => {
-    const { visible, onClose } = props;
+    const { visible, onClose, onLoginSuccess } = props;
 
     const [value, setValue] = useState<AuthTabs>(AuthTabs.Login);
     const handleChangeTab = (val: AuthTabs, event: React.SyntheticEvent) => {
         setValue(val);
     };
+
     return (
         <Modal
             outSideClick={true}
@@ -26,6 +31,7 @@ const AuthModal = (props: Props) => {
                 <div className='w-[800px] h-[580px] flex bg-white rounded-2xl overflow-hidden'>
                     <div className='relative w-[350px] flex-shrink-0'>
                         <img
+                            alt='wing-of-an-airplane-PNLGCK4'
                             className='absolute h-full w-full object-cover'
                             src='https://flypensacola.com/wp-content/uploads/2020/06/morning-sunrise-with-wing-of-an-airplane-PNLGCK4.jpg'
                         />
@@ -46,96 +52,10 @@ const AuthModal = (props: Props) => {
                             </Tabs>
                         </div>
                         <TabPane value={value} id={AuthTabs.Login}>
-                            <div className='flex flex-col gap-4'>
-                                <Input
-                                    startAdornment={<i className='icon icon-user text-[24px]' />}
-                                    size='lg'
-                                    label='Tên đăng nhập'
-                                    placeholder='Tên đăng nhập'
-                                    fullWidth
-                                />
-                                <Input
-                                    size='lg'
-                                    fullWidth
-                                    type='password'
-                                    label='Mật khẩu'
-                                    placeholder='Mật khẩu'
-                                    aria-autocomplete='none'
-                                    inputProps={{
-                                        type: 'password',
-                                    }}
-                                    startAdornment={<i className='icon icon-keychain text-[24px]' />}
-                                />
-                                <Checkbox
-                                    customClasses={{
-                                        label: 'text-base',
-                                    }}
-                                    defaultChecked
-                                    size='md'
-                                    label='Ghi nhớ đăng nhập'
-                                />
-                                <Button
-                                    fullWidth
-                                    size='lg'
-                                    customClasses={{
-                                        root: 'h-[48px] !rounded-lg',
-                                    }}
-                                >
-                                    Đăng nhập
-                                </Button>
-                            </div>
+                            <LoginForm onSuccess={onLoginSuccess} />
                         </TabPane>
                         <TabPane value={value} id={AuthTabs.Register}>
-                            <div className='flex flex-col gap-4'>
-                                <Input
-                                    startAdornment={<i className='icon icon-mail text-[24px]' />}
-                                    size='lg'
-                                    label='Email'
-                                    placeholder='Địa chỉ email'
-                                    fullWidth
-                                />
-                                <Input
-                                    size='lg'
-                                    fullWidth
-                                    label='Mật khẩu'
-                                    placeholder='Mật khẩu'
-                                    type='password'
-                                    aria-autocomplete='none'
-                                    inputProps={{
-                                        type: 'password',
-                                    }}
-                                    startAdornment={<i className='icon icon-keychain text-[24px]' />}
-                                />
-                                <Input
-                                    size='lg'
-                                    fullWidth
-                                    label='Nhập lại mật khẩu'
-                                    placeholder='Nhập lại mật khẩu'
-                                    type='password'
-                                    aria-autocomplete='none'
-                                    inputProps={{
-                                        type: 'password',
-                                    }}
-                                    startAdornment={<i className='icon icon-keychain text-[24px]' />}
-                                />
-                                <Checkbox
-                                    customClasses={{
-                                        label: 'text-base',
-                                    }}
-                                    defaultChecked
-                                    size='md'
-                                    label='Gửi cho tôi tin khuyến mại và các giảm giá đặc biệt của Flynow'
-                                />
-                                <Button
-                                    customClasses={{
-                                        root: 'h-[48px] !rounded-lg',
-                                    }}
-                                    fullWidth
-                                    size='lg'
-                                >
-                                    Đăng ký
-                                </Button>
-                            </div>
+                            <RegisterForm />
                         </TabPane>
                         <div className='flex flex-col text-center'>
                             <Tooltip title='Đăng nhập bằng tài khoản mạng xã hội' placement='top'>

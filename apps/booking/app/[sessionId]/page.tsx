@@ -5,10 +5,10 @@ import dynamic from 'next/dynamic';
 // providers
 import { SWRConfig } from '@acme/api';
 import { CreateBookingProvider } from 'contexts/create-booking-context/createBookingContext';
-import Loading from 'app/components/Loading';
+import Loading from 'views/components/Loading';
 
 // components
-const CreateBooking = dynamic(() => import('views/create-booking/index'), {
+const CreateBooking = dynamic(() => import('views/booking/index'), {
     ssr: false,
     loading: Loading,
 });

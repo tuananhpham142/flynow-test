@@ -1,13 +1,17 @@
 'use client';
-import React, { FC } from 'react';
-import { Typography, Tag, Card, Button } from '@acme/design-system';
+import React, { FC, useState } from 'react';
+import { Typography, Tag, Card, Button, _OpenConfirmDialog } from '@acme/design-system';
 import StarRated from '@acme/pages/components/ReviewAndRating/StarRated';
 import SurchargeItem from '@/views/Accommodation/Detail/components/SurchargeItem';
+import CreateAriseDrawer from '@/views/Accommodation/Detail/components/CreateAriseDrawer';
+import OrderCancellationDrawer from '@/views/Accommodation/Detail/components/OrderCancellationDrawer';
 
 interface IProps {}
 
 const AccommodationBookingDetail: FC<IProps> = (props) => {
     const {} = props;
+    const [visibleCreateArise, setVisibleCreateArise] = useState<boolean>(false);
+    const [visibleCancellation, setVisibleCancellation] = useState<boolean>(false);
 
     const renderRoomDetailItem = () => {
         return (
@@ -33,25 +37,34 @@ const AccommodationBookingDetail: FC<IProps> = (props) => {
 
     const renderRoomPriceItem = () => {
         return (
-            <div className='flex gap-10 py-4'>
-                <div className='flex '>
+            <div className='flex flex-col gap-3'>
+                <div className='flex justify-between border-b border-grey-300'>
                     <Typography variant={'subtitle16'}>Phòng 1</Typography>
                     <Typography variant={'caption'} className={'!text-grey-600'}>
                         2 người lớn, 1 trẻ em (3 tuổi)
                     </Typography>
                 </div>
-
-                <div className={'flex-1 flex gap-3'}>
-                    <div className='flex flex-col gap-4'>
-                        <Typography variant={'body16'}>Số lượng khách:</Typography>
-                        <Typography variant={'body16'}>Khách đặt:</Typography>
-                        <Typography variant={'body16'}>Số điện thoại:</Typography>
-                    </div>
-                    <div className='flex flex-col gap-4'>
-                        <Typography variant={'body16'}>2 người lớn, 1 trẻ em</Typography>
-                        <Typography variant={'body16'}>Nguyễn Văn An</Typography>
-                        <Typography variant={'body16'}>0987654321</Typography>
-                    </div>
+                <div className='flex justify-between mb-1'>
+                    <Typography variant={'body16'} className={'!text-primary'}>
+                        <i className='icon icon-caret-down text-[16px]' /> 2 đêm
+                    </Typography>
+                    <Typography variant={'body16'}>1,200,000₫</Typography>
+                </div>
+                <div className='flex justify-between'>
+                    <Typography variant={'body16'}>1 giường phụ x 4 đêm</Typography>
+                    <Typography variant={'body16'}>350,000₫</Typography>
+                </div>
+                <div className='flex justify-between'>
+                    <Typography variant={'body16'}>1 trẻ em 8 tuổi x 4 đêm</Typography>
+                    <Typography variant={'body16'}>350,000₫</Typography>
+                </div>
+                <div className='flex justify-between'>
+                    <Typography variant={'body16'}>Dịch vụ đi kèm tính phí</Typography>
+                    <Typography variant={'body16'}>350,000₫</Typography>
+                </div>
+                <div className='flex justify-between'>
+                    <Typography variant={'body16'}>Thuế phí mỗi đêm</Typography>
+                    <Typography variant={'body16'}>350,000₫</Typography>
                 </div>
             </div>
         );
@@ -154,9 +167,12 @@ const AccommodationBookingDetail: FC<IProps> = (props) => {
                 }
             />
 
-            <Button size='xl' customClasses={{ root: 'mt-6 mb-2' }}>
+            <Button size='xl' customClasses={{ root: 'mt-6 mb-2' }} onClick={() => setVisibleCreateArise(true)}>
                 Tạo phát sinh thêm
             </Button>
+
+            <CreateAriseDrawer visible={visibleCreateArise} onClose={() => setVisibleCreateArise(false)} />
+            <OrderCancellationDrawer visible={visibleCancellation} onClose={() => setVisibleCancellation(false)} />
 
             <div className='flex flex-row gap-6'>
                 <div className='basis-2/3'>
@@ -212,6 +228,36 @@ const AccommodationBookingDetail: FC<IProps> = (props) => {
                             </div>
                         }
                     />
+                    <div className='flex items-center gap-1 mt-4'>
+                        <Button variant={'text'} startIcon={<i className='icon icon-caret-right' />}>
+                            Xuất hóa đơn
+                        </Button>
+                        <Button
+                            variant={'text'}
+                            startIcon={<i className='icon icon-caret-right' />}
+                            onClick={() => {
+                                _OpenConfirmDialog({
+                                    title: 'Xác nhận hành động',
+                                    content: 'Bạn có chắc chắn muốn...',
+                                    variant: 'danger',
+                                    onConfirm: () => {},
+                                    onCancel: () => {},
+                                    duration: 0,
+                                    labelConfirm: 'Xác nhận xóa',
+                                    labelCancel: 'Bỏ qua',
+                                });
+                            }}
+                        >
+                            Xoá đơn
+                        </Button>
+                        <Button
+                            variant={'text'}
+                            startIcon={<i className='icon icon-caret-right' />}
+                            onClick={() => setVisibleCancellation(true)}
+                        >
+                            Huỷ đơn hàng
+                        </Button>
+                    </div>
                 </div>
                 <div className='basis-1/3'>
                     <Card
@@ -221,7 +267,31 @@ const AccommodationBookingDetail: FC<IProps> = (props) => {
                             <div>
                                 <div>
                                     <Typography variant={'subtitle20'}>Chi tiết thanh toán</Typography>
-                                    <div className={'divide-y divide-grey-300'}></div>
+                                    <div className={'flex flex-col gap-4 mt-4'}>
+                                        {renderRoomPriceItem()}
+                                        {renderRoomPriceItem()}
+                                    </div>
+                                    <div className='flex flex-col gap-3 pt-2 mt-4 border-t border-grey-300'>
+                                        <div className='flex justify-between'>
+                                            <Typography variant={'subtitle16'}>Tổng thanh toán</Typography>
+                                            <Typography variant={'subtitle16'} className={'!text-warning'}>
+                                                4,000,000₫
+                                            </Typography>
+                                        </div>
+                                        <Typography variant={'caption'} className={'!text-grey-600'}>
+                                            Giá đã bao gồm thuế, phí và hoá đơn VAT
+                                        </Typography>
+                                        <div className='flex justify-between'>
+                                            <Typography variant={'body16'}>Thời gian thanh toán</Typography>
+                                            <Typography variant={'body16'}>13/04/2023, 14:43:21</Typography>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <Typography variant={'body16'}>Trạng thái thanh toán</Typography>
+                                            <Typography variant={'body16'} className={'!text-success'}>
+                                                Thành công
+                                            </Typography>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         }

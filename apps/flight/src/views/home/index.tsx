@@ -12,34 +12,48 @@ import FlightSorting from './components/FlightSort';
 import { flatAndAggregateFlights } from '@/utils/flatAndAggregateFlights';
 import { buildFilter, flightFilter, sortByKey } from '@acme/utils';
 
+// hooks
+
 // services
 import { useFlightInitSessionMutation, useSearchAvailabilitiesFlightMutation } from '@/services';
 
 // types
 import type { FlattedFlight } from '@/models/Flight/FlightModel';
-import { InitSessionRequest } from '@/models/FlightSession/SessionRequest';
 import type { FlightFilter, FlightSort } from '@/types/types';
 import type { FlightFilterType } from '@acme/utils';
 // enums
 import { FlightViewMode } from '@/contexts/flight/FlightContext.type';
-import { FlightItinerary } from '@/models/Flight/FlightEnum';
+import { FlightQuery } from '@acme/pages/components/Search/Flight';
+import { queryString } from '@acme/utils';
 
-type Props = {};
-
-const initialSearchData: Omit<InitSessionRequest['body'], 'IsCheapest' | 'AId'> = {
-    StartPoint: 'HAN',
-    EndPoint: 'SGN',
-    DepartureDate: '2023-09-20',
-    ReturnDate: '2023-09-30',
-    Adult: 1,
-    Children: 0,
-    Infant: 0,
-    ItineraryType: FlightItinerary.RoundTrip,
+type Props = {
+    params: {};
+    searchParams: URLSearchParams;
 };
 
 const FlightHome: React.FC<Props> = (props) => {
+    // console.log(props);
+
     const { sessionData, flightViewMode, updateSessionId, updateFlightAggregate, updateSessionData } =
         React.useContext(FlightContext);
+
+    // const { cookie, setCookieValue, removeCookie } = useCookie('flight-session-id');
+
+    // console.log(cookie);
+
+    const parsedUrl = queryString.parseUrl(window.location.href, {
+        parseNumbers: true,
+        parseBooleans: true,
+    });
+
+    const flightQuery = parsedUrl.query as unknown as FlightQuery;
+
+    // const isValidFlightQuery = (query: FlightQuery) => {
+    //     const { DepartureDate, ReturnDate, Adult, Children, Infant, ItineraryType, EndPoint, StartPoint } = query;
+    //     return Boolean(DepartureDate && ReturnDate && ItineraryType && EndPoint && StartPoint);
+    // };
+
+    // console.log(isValidFlightQuery(flightQuery));
 
     const [filter, setFilter] = useState<FlightFilterType<FlightFilter.FilterKeys>>({});
     const [sort, setSort] = useState<FlightSort.SortOptionValue>({
@@ -76,6 +90,11 @@ const FlightHome: React.FC<Props> = (props) => {
         });
         if (res.data) {
             const sessionId = res.data.Data.SessionId;
+            // setCookieValue({
+            //     value: sessionId,
+            //     expireHours: 1,
+            // });
+
             updateSessionData(res.data.Data);
 
             updateSessionId(sessionId);
@@ -87,6 +106,16 @@ const FlightHome: React.FC<Props> = (props) => {
                     viewMode: 1,
                 }).then((res) => {
                     if (res?.data?.Data) {
+                        if (sessionData) {
+                            if (
+                                sessionData.FlightData.DepartureFlights.length <
+                                    res.data.Data.FlightData.DepartureFlights.length ||
+                                sessionData.FlightData.ReturnFlights.length <
+                                    res.data.Data.FlightData.ReturnFlights.length
+                            ) {
+                                updateSessionData(res.data.Data);
+                            }
+                        }
                         updateSessionData(res.data.Data);
                     }
                 });
@@ -95,7 +124,7 @@ const FlightHome: React.FC<Props> = (props) => {
     };
 
     useEffect(() => {
-        handleSearchFlights(initialSearchData);
+        handleSearchFlights(flightQuery);
     }, []);
 
     // filter and sort flights
@@ -122,14 +151,14 @@ const FlightHome: React.FC<Props> = (props) => {
     }, [sort, filteredFlight]);
 
     // const isSearchFlightsLoading = isInitSession || isSearchFlights;
-    const isEmpty = sortedFlights.length === 0 && !isSearchFlights;
+    const isEmpty = sortedFlights.length === 0 && !isSearchFlights && !isInitSession;
 
     const isSearchFlightsLoading = (!isEmpty && sortedFlights.length === 0) || isInitSession;
 
     return (
         <>
             <FlightSearch
-                initialData={initialSearchData}
+                initialData={flightQuery}
                 onSubmit={(data) => {
                     handleSearchFlights({
                         StartPoint: data.selectedDepartureAirport.Id,
@@ -162,7 +191,7 @@ const FlightHome: React.FC<Props> = (props) => {
                                 }}
                                 isLoading={isSearchFlightsLoading}
                             />
-                            <FlightList flights={sortedFlights} isLoading={isSearchFlightsLoading} />
+                            <FlightList flights={sortedFlights} isLoading={isSearchFlightsLoading} isEmpty={isEmpty} />
                         </section>
                     </div>
                 </div>
@@ -171,10 +200,10 @@ const FlightHome: React.FC<Props> = (props) => {
     );
 };
 
-const HomePage = () => {
+const HomePage = (props: Props) => {
     return (
         <FlightProvider>
-            <FlightHome />
+            <FlightHome {...props} />
         </FlightProvider>
     );
 };

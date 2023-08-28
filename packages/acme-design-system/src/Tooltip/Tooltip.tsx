@@ -23,15 +23,29 @@ const ARROW_WIDTH = 13;
 const ARROW_HEIGHT = 7;
 
 const Tooltip: React.FC<TooltipProps> = (props) => {
-    const { children, title, placement, effect = 'light', customClasses, triggerOnClick, showArrow = true } = props;
-    const [isOpen, setIsOpen] = useState(false);
+    const {
+        children,
+        title,
+        placement,
+        effect = 'light',
+        customClasses,
+        triggerOnClick,
+        showArrow = true,
+        open: controlledOpen,
+        onOpenChange: setControlledOpen,
+    } = props;
+    const [unControlledOpen, setUncontrolledOpen] = useState(false);
+
+    const open = controlledOpen ?? unControlledOpen;
+
+    const setOpen = setControlledOpen ?? setUncontrolledOpen;
 
     const arrowRef = useRef(null);
 
     const { refs, floatingStyles, context, middlewareData } = useFloating({
         placement: placement,
-        open: isOpen,
-        onOpenChange: setIsOpen,
+        open: open,
+        onOpenChange: setOpen,
         whileElementsMounted: autoUpdate,
         middleware: [offset(ARROW_HEIGHT), flip({ padding: 5 }), shift({ padding: 5 }), arrow({ element: arrowRef })],
     });

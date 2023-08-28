@@ -1,6 +1,6 @@
 'use client';
-import { FC } from 'react';
-import AccommodationList from '../AccommodationList';
+import { FC, useState } from 'react';
+import Accommodations from '../Accommodations';
 import Amenities from './Amenities';
 import Area from './Area';
 import BoxMap from './BoxMap';
@@ -8,17 +8,21 @@ import PriceRange from './PriceRange';
 import SortedAndShowBy from './SortedAndShowBy';
 import StarRating from './StarRating';
 import TypeOfAccommodation from './Types';
+import MapView from '@/views/ListAccommodation/components/Maps';
 
-interface IProps {}
+interface IProps {
+    children: React.ReactNode;
+    onVisibleMaps: () => void;
+}
 
 const FiltersAccommodation: FC<IProps> = (props) => {
-    const {} = props;
+    const { children, onVisibleMaps } = props;
 
     return (
         <div className='flex gap-6'>
             <div className='basis-1/4'>
                 <div className='flex flex-col gap-4'>
-                    <BoxMap />
+                    <BoxMap onClick={onVisibleMaps} />
                     <PriceRange />
                     <StarRating />
                     <Area />
@@ -28,7 +32,7 @@ const FiltersAccommodation: FC<IProps> = (props) => {
             </div>
             <div className='basis-3/4'>
                 <SortedAndShowBy />
-                <AccommodationList />
+                {children}
             </div>
         </div>
     );

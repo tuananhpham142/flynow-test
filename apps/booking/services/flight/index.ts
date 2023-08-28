@@ -3,6 +3,8 @@ import { useCreateBookingMutation } from './createBooking';
 import { useAddPassengerMutation } from './addPassenger';
 import { useUpdatePassengerDetailMutation } from './updatePassengerDetail';
 import { useGetFareRuleQuery } from './getFarerule';
+import { useUpdatePassengerBaggageMutation } from './updatePassengerBaggage';
+import { useUpdatePassengerAndContactMutation } from './updatePassengerAndContact';
 
 export {
     useAddPassengerMutation,
@@ -10,4 +12,6 @@ export {
     useUpdatePassengerDetailMutation,
     useUpdateContactMutation,
     useGetFareRuleQuery,
+    useUpdatePassengerBaggageMutation,
+    useUpdatePassengerAndContactMutation,
 };

@@ -10,9 +10,9 @@ const Footer = (props: Props) => {
         // <div className='max-w-[1200px] mx-auto px-6'>
         //     <div className='flex justify-between py-4'>
         <footer className='bg-grey-700 mt-10 text-white'>
-            <div className='max-w-[1200px] mx-auto text-white p-6'>
+            <div className='max-w-[1200px] mx-auto text-white py-6'>
                 <div className='flex justify-between py-4 pl-6 pr-3'>
-                    <Logo width={126} hexColor='#fff' />
+                    <Logo width={126} className='!fill-white' />
                     <div className='flex gap-3'>
                         <svg
                             width='199'

@@ -3,23 +3,22 @@ import { useMutation } from '@acme/api';
 import {
     Button,
     Datepicker,
-    Divider,
     IconButton,
     Input,
     Popover,
     PopoverContent,
     PopoverTrigger,
-    StepperInput,
-    Typography,
     dayjs,
 } from '@acme/design-system';
-import { useForm, FormProvider, set } from '@acme/design-system/ReactHookForm';
 import { DateValueType } from '@acme/design-system/DatePicker/DatePicker.types';
 import { FC, useEffect, useState } from 'react';
 import FlightAutosuggestResult from './FlightAutosuggestResult';
-import { domesticAirports } from './domesticAirports';
 import FlightSearchItineraryTypeDropdown from './FlightSearchItineraryTypeDropdown';
 import FlightSearchPassengerCount from './FlightSearchPassengerCount';
+import { domesticAirports } from './domesticAirports';
+// utils
+import { queryString } from '@acme/utils';
+import { useRouter } from 'next/navigation';
 
 // types
 export type AirPort = {
@@ -33,43 +32,93 @@ export type AirPort = {
     PlaceId: string | null;
     PlaceName: string | null;
 };
+
+export type FlightQuery = {
+    ItineraryType: 1 | 2;
+    StartPoint: string;
+    EndPoint: string;
+    DepartureDate: string;
+    ReturnDate: string;
+    Adult: number;
+    Children: number;
+    Infant: number;
+    StartCityName: string;
+    EndCityName: string;
+};
 interface IProps {
     onSubmit: (data: any) => void;
-    initialData?: any;
+    initialData?: FlightQuery;
     isLoading?: boolean;
+    isHomePage?: boolean;
 }
 
 const SEARCH_DEBOUNCE_TIME = 300;
 
 const FlightSearch: FC<IProps> = (props) => {
     const today = dayjs().format('YYYY-MM-DD');
-    const { onSubmit, initialData, isLoading } = props;
+    const {
+        onSubmit = () => {},
+        initialData = {
+            StartPoint: domesticAirports[0].Id,
+            EndPoint: domesticAirports[1].Id,
+            DepartureDate: today,
+            ReturnDate: today,
+            Adult: 1,
+            Children: 0,
+            Infant: 0,
+            ItineraryType: 2,
+            StartCityName: domesticAirports[0].CityName,
+            EndCityName: domesticAirports[1].CityName,
+        },
+        isLoading,
+        isHomePage = true,
+    } = props;
+
+    const {
+        StartPoint,
+        EndPoint,
+        DepartureDate,
+        ReturnDate,
+        Adult,
+        Children,
+        Infant,
+        ItineraryType,
+        StartCityName,
+        EndCityName,
+    } = initialData;
+
+    const router = useRouter();
+
+    // console.log(router);
+
     // value state
     const [valueDatePicker, setValueDatePicker] = useState<DateValueType>({
-        startDate: initialData?.DepartureDate || today,
-        endDate: initialData?.ReturnDate || today,
+        startDate: DepartureDate,
+        endDate: ReturnDate,
     });
-    const [selectedDepartureAirport, setSelectedDepartureAirport] = useState<AirPort | null>(domesticAirports[0]);
-    const [selectedReturnAirport, setSelectedReturnAirport] = useState<AirPort | null>(domesticAirports[1]);
+    const [selectedDepartureAirport, setSelectedDepartureAirport] = useState<Pick<AirPort, 'Id' | 'CityName'> | null>({
+        Id: StartPoint,
+        CityName: StartCityName,
+    });
+    const [selectedReturnAirport, setSelectedReturnAirport] = useState<Pick<AirPort, 'Id' | 'CityName'> | null>({
+        Id: EndPoint,
+        CityName: EndCityName,
+    });
 
     const [passengerCount, setPassengerCount] = useState({
-        Adult: initialData?.Adult || 1,
-        Children: initialData?.Children || 0,
-        Infant: initialData?.Infant || 0,
+        Adult: Adult,
+        Children: Children,
+        Infant: Infant,
     });
 
-    const [itineraryType, setItineraryType] = useState<1 | 2>(initialData?.ItineraryType || 2);
+    const [itineraryType, setItineraryType] = useState<1 | 2>(ItineraryType);
 
     const [isShowDepartureSearchResult, setIsShowDepartureSearchResult] = useState<boolean>(false);
     const [isShowReturnSearchResult, setIsShowReturnSearchResult] = useState<boolean>(false);
     const [isForcusCalendar, showIsForcusCalendar] = useState<boolean>(false);
 
-    const [departureInputValue, setDepartureInputValue] = useState<string>(
-        `${domesticAirports[0].CityName} (${domesticAirports[0].Id})`,
-    );
-    const [returnInputValue, setReturnInputValue] = useState<string>(
-        `${domesticAirports[1].CityName} (${domesticAirports[1].Id})`,
-    );
+    const [departureInputValue, setDepartureInputValue] = useState<string>(`${StartCityName} (${StartPoint})`);
+    const [returnInputValue, setReturnInputValue] = useState<string>(`${EndCityName} (${EndPoint})`);
 
     // services
     const {
@@ -79,7 +128,6 @@ const FlightSearch: FC<IProps> = (props) => {
     } = useMutation<any, Array<AirPort>>({
         method: 'GET',
         url: `https://alphaapi.digipost.com.vn/api/publicbooking/airport/autosuggest/${departureInputValue}`,
-        // request: {},
     });
     const {
         trigger: searchReturnAirport,
@@ -88,16 +136,15 @@ const FlightSearch: FC<IProps> = (props) => {
     } = useMutation<any, Array<AirPort>>({
         method: 'GET',
         url: `https://alphaapi.digipost.com.vn/api/publicbooking/airport/autosuggest/${returnInputValue}`,
-        // request: {},
     });
 
     // handlers
-    const handleSelectDepartureAirport = (airport: AirPort) => {
+    const handleSelectDepartureAirport = (airport: Pick<AirPort, 'Id' | 'CityName'>) => {
         setSelectedDepartureAirport(airport);
         setDepartureInputValue(`${airport.CityName} (${airport.Id})`);
         setIsShowDepartureSearchResult(false);
     };
-    const handleSelectReturnAirport = (airport: AirPort) => {
+    const handleSelectReturnAirport = (airport: Pick<AirPort, 'Id' | 'CityName'>) => {
         setSelectedReturnAirport(airport);
         setReturnInputValue(`${airport.CityName} (${airport.Id})`);
         setIsShowReturnSearchResult(false);
@@ -122,13 +169,32 @@ const FlightSearch: FC<IProps> = (props) => {
             return;
         }
 
-        onSubmit({
-            selectedDepartureAirport,
-            selectedReturnAirport,
-            valueDatePicker,
-            ...passengerCount,
+        const flightQuery: FlightQuery = {
             ItineraryType: itineraryType,
-        });
+            StartPoint: selectedDepartureAirport.Id,
+            EndPoint: selectedReturnAirport.Id,
+            DepartureDate: valueDatePicker.startDate as string,
+            ReturnDate: valueDatePicker.endDate as string,
+            Adult: passengerCount.Adult,
+            Children: passengerCount.Children,
+            Infant: passengerCount.Infant,
+            StartCityName: selectedDepartureAirport.CityName,
+            EndCityName: selectedReturnAirport.CityName,
+        };
+
+        const searchParams = queryString.stringify(flightQuery);
+        if (isHomePage) {
+            window.location.assign(`${window.location.origin}/flight?${searchParams}`);
+        } else {
+            router.replace(`?${searchParams}`);
+            onSubmit({
+                selectedDepartureAirport,
+                selectedReturnAirport,
+                valueDatePicker,
+                ...passengerCount,
+                ItineraryType: itineraryType,
+            });
+        }
     };
 
     // useEffects
@@ -228,7 +294,13 @@ const FlightSearch: FC<IProps> = (props) => {
                                             setDepartureInputValue('');
                                             setSelectedDepartureAirport(null);
                                         }}
-                                        // onBlur={() => {}}
+                                        onBlur={() => {
+                                            if (selectedDepartureAirport) {
+                                                setDepartureInputValue(
+                                                    `${selectedDepartureAirport.CityName} (${selectedDepartureAirport.Id})`,
+                                                );
+                                            }
+                                        }}
                                         onFocus={(e) => {
                                             e.target.select();
                                         }}
@@ -237,7 +309,7 @@ const FlightSearch: FC<IProps> = (props) => {
                                         placeholder='Điểm đi'
                                     />
                                 </PopoverTrigger>
-                                <PopoverContent className='z-100 !w-[650px]'>
+                                <PopoverContent className='z-100 !w-[600px]'>
                                     <FlightAutosuggestResult
                                         keyword={departureInputValue}
                                         onSelectHistory={(keyword) => {
@@ -275,7 +347,7 @@ const FlightSearch: FC<IProps> = (props) => {
                         </IconButton>
                         <div className='flex-1'>
                             <Popover
-                                placement='bottom-end'
+                                placement='bottom-start'
                                 open={isShowReturnSearchResult}
                                 onOpenChange={setIsShowReturnSearchResult}
                             >
@@ -318,7 +390,13 @@ const FlightSearch: FC<IProps> = (props) => {
                                             setReturnInputValue('');
                                             setSelectedReturnAirport(null);
                                         }}
-                                        // onBlur={() => {}}
+                                        onBlur={() => {
+                                            if (selectedReturnAirport) {
+                                                setReturnInputValue(
+                                                    `${selectedReturnAirport.CityName} (${selectedReturnAirport.Id})`,
+                                                );
+                                            }
+                                        }}
                                         onFocus={(e) => {
                                             e.target.select();
                                         }}
@@ -326,7 +404,7 @@ const FlightSearch: FC<IProps> = (props) => {
                                         placeholder='Điểm đến'
                                     />
                                 </PopoverTrigger>
-                                <PopoverContent className='z-100 !w-[650px]'>
+                                <PopoverContent className='z-100 !w-[600px]'>
                                     <FlightAutosuggestResult
                                         isLoading={isSearchReturn}
                                         keyword={returnInputValue}

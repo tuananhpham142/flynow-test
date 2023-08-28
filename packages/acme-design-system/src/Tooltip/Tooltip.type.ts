@@ -8,4 +8,6 @@ export interface TooltipProps extends CustomClasses<'tooltip' | 'arrow'> {
     title: React.ReactNode | string;
     effect?: 'dark' | 'light';
     triggerOnClick?: boolean;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
 }

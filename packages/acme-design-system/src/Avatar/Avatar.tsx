@@ -1,6 +1,6 @@
+import clsx from 'clsx';
 import { FC } from 'react';
 import { AvatarProps } from './Avatar.types';
-import clsx from 'clsx';
 
 const Avatar: FC<AvatarProps> = (props) => {
     const { children, variant, customClasses, size, src, alt, badgeContent, showBadge } = props;
@@ -48,7 +48,8 @@ const Avatar: FC<AvatarProps> = (props) => {
             {showBadge && <span className={badgeClasses}>{badgeContent}</span>}
             {src ? (
                 <div className='w-full h-full overflow-hidden rounded-full'>
-                    <img className='w-full h-full object-cover' loading={'lazy'} src={src} alt={alt} />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img className='w-full h-full object-cover' loading={'lazy'} src={src} alt={alt || 'avatar'} />
                 </div>
             ) : (
                 <>{children}</>

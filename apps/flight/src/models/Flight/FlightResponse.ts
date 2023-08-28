@@ -1,5 +1,8 @@
-import { SessionModel } from '../FlightSession/SessionModel';
 import { FlightInfoSelected, FlightModel } from './FlightModel';
+import { IATA_AirlineCodes } from '@/types/types';
+import { InitSessionData } from '../FlightSession/SessionResponse';
+import { SessionModel } from '../FlightSession/SessionModel';
+import { AirlinesEnum } from './FlightEnum';
 
 export type ContactInfo = {
     FullName: string;

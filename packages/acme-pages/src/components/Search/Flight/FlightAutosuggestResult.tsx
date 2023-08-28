@@ -1,7 +1,6 @@
 import { Card, Chip, Divider, ListRenderer, Typography } from '@acme/design-system';
 import { FC } from 'react';
 import ListItemHorizontal from '../../ListItemHorizontal';
-// import ListItemHorizontal from '@acme/pages/components/ListItemHorizontal';
 import { domesticAirports } from './domesticAirports';
 interface IProps {
     result: Array<any>;
@@ -136,7 +135,7 @@ const FlightAutosuggestResult: FC<IProps> = (props) => {
                                         />
                                     )}
                                     customClasses={{
-                                        wrapper: 'h-80 overflow-y-scroll',
+                                        wrapper: 'h-64 overflow-y-scroll',
                                         itemWrapper: 'hover:bg-grey-200 rounded-lg p-2 cursor-pointer',
                                     }}
                                 />

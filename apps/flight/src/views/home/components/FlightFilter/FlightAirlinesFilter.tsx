@@ -1,7 +1,7 @@
-import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
-import { Checkbox, IconButton, Input, Typography } from '@acme/design-system';
-import { FlightFilter } from '@/types/types';
 import FlightContext from '@/contexts/flight/FlightContext';
+import { FlightFilter } from '@/types/types';
+import { Checkbox, IconButton, Input, Typography } from '@acme/design-system';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 type Props = {
     onFilter: Dispatch<SetStateAction<FlightFilter.FilterType>>;

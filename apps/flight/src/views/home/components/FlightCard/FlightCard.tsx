@@ -33,6 +33,7 @@ const FlightCard = (props: Props) => {
     const { sessionData } = React.useContext(FlightContext);
 
     const [showDetail, setShowDetail] = useState(false);
+
     const [detailTab, setDetailTab] = useState<FlightDetailTabs>(FlightDetailTabs.FLIGHT_DETAIL);
     const handleChangeTabDetail = (val: FlightDetailTabs, event: React.SyntheticEvent) => {
         setDetailTab(val);
@@ -63,11 +64,14 @@ const FlightCard = (props: Props) => {
         DiffType: 'days',
     });
 
+    const { Adult, Children, Infant } = sessionData?.InitSessionData || { Adult: 0, Children: 0, Infant: 0 };
+
     const adultPrice = flight.BaseAdult + flight.TaxAdult + flight.FeeAdult + flight.AirporFeetAdult;
+
     const childrenPrice = flight.BaseChild + flight.TaxChild + flight.FeeChild + flight.AirportFeeChild;
+
     const infantPrice = flight.BaseInf + flight.TaxInf + flight.FeeInf + flight.AirportFeeInf;
 
-    if (!sessionData) return null;
     return (
         <Card
             variant='border'
@@ -89,7 +93,7 @@ const FlightCard = (props: Props) => {
                                     <span className='text-[13px] text-grey-500'>Loại vé: {flight.GroupClass}</span>
                                 </div>
                             </div>
-                            <div className='flex justify-between gap-9 flex-1'>
+                            <div className='flex justify-between gap-9 w-[489px]'>
                                 <div className='flex items-center flex-1 gap-3'>
                                     {/* Flight Schedule  */}
                                     <div className='flex justify-center items-center flex-col gap-1'>
@@ -139,7 +143,7 @@ const FlightCard = (props: Props) => {
                                         </span>
                                         <span className='text-[13px]'>
                                             {/* {flight.ListSegment[0].EndPointCityName} ( */}
-                                            {flight.ListSegment[0].EndPoint}
+                                            {flight.ListSegment[flight.ListSegment.length - 1].EndPoint}
                                             {/* ) */}
                                         </span>
                                     </div>
@@ -215,173 +219,216 @@ const FlightCard = (props: Props) => {
                                     <div className='flex flex-col gap-2.5'>
                                         {flight.ListSegment.map((segment, index) => {
                                             return (
-                                                <Card
-                                                    key={`${segment.AirlineCode}_${index}`}
-                                                    variant='border'
-                                                    customClasses={{
-                                                        root: 'w-full',
-                                                    }}
-                                                    noPadding
-                                                    body={
-                                                        <div className='flex min-h-[184px] p-6 gap-4 w-full'>
-                                                            <div className='flex flex-col w-[135px]'>
-                                                                <div className=''>
-                                                                    {getAirlineLogo(flight.AirlineCode, {
-                                                                        width: 48,
-                                                                        height: 48,
-                                                                    })}
-                                                                </div>
-                                                                <div className='flex flex-col text-[13px]'>
-                                                                    <span className='text-grey-800'>
-                                                                        {segment.AirlineName}
-                                                                    </span>
-                                                                    <span className='text-grey-500'>
-                                                                        {segment.FlightNumber} •{' '}
-                                                                        {getPlaneType(Number(segment.Plane))}
-                                                                    </span>
-                                                                    <span className='text-grey-500'>
-                                                                        Loại vé: {flight.GroupClass}
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                            <div className='flex gap-2 w-[355px]'>
-                                                                <div className='flex flex-col gap-0.5 justify-between h-full pb-4'>
-                                                                    <i className='icon icon-flight-pland text-[24px]' />
-                                                                    <div className='flex justify-center flex-1'>
-                                                                        <Divider
-                                                                            vertical
-                                                                            className='h-full'
-                                                                            color='grey-800'
-                                                                        />
-                                                                    </div>
-                                                                    <i className='icon icon-location text-[24px]' />
-                                                                </div>
-                                                                <div className='flex flex-col gap-2 justify-between flex-1'>
-                                                                    <div className='flex gap-4'>
-                                                                        <div className='flex flex-col'>
-                                                                            <span className='font-bold'>
-                                                                                {formatFlightTime(segment.StartDate)}
-                                                                            </span>
-                                                                            <span className='text-[13px] text-grey-500'>
-                                                                                {formatFlightDate(segment.StartDate)}
-                                                                            </span>
-                                                                        </div>
-                                                                        <div className='flex flex-col'>
-                                                                            <span className='font-bold'>
-                                                                                {segment.StartPointCityName} (
-                                                                                {segment.StartPoint})
-                                                                            </span>
-                                                                            <span className='text-[13px] text-grey-500'>
-                                                                                {segment.StartPointName}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className='flex items-center gap-1'>
-                                                                        <i className='icon icon-clock text-[24px]' />
-                                                                        <span className='text-success'>
-                                                                            {flightMinutesDurationFormat(
-                                                                                segment.FlightTime,
-                                                                            )}
-                                                                        </span>
-                                                                    </div>
-                                                                    <div className='flex gap-4'>
-                                                                        <div className='flex flex-col'>
-                                                                            <span className='font-bold'>
-                                                                                {formatFlightTime(segment.EndDate)}
-                                                                            </span>
-                                                                            <span className='text-[13px] text-grey-500'>
-                                                                                {formatFlightDate(segment.EndDate)}
-                                                                            </span>
-                                                                        </div>
-                                                                        <div className='flex flex-col'>
-                                                                            <span className='font-bold'>
-                                                                                {segment.EndPointCityName} (
-                                                                                {segment.EndPoint})
-                                                                            </span>
-                                                                            <span className='text-[13px] text-grey-500'>
-                                                                                {segment.EndPointName}
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className='flex flex-col gap-2 flex-1 text-[13px] text-grey-800'>
-                                                                <div className='flex gap-1'>
-                                                                    <i className='icon icon-baggade text-[20px]' />
-                                                                    <Typography
-                                                                        customClasses={{
-                                                                            root: '!text-[13px] leading-[20px]',
-                                                                        }}
-                                                                    >
-                                                                        <Typography htmlTag='span' variant='subtitle14'>
-                                                                            Hành lý:
-                                                                        </Typography>{' '}
-                                                                        {segment.HandBaggage &&
-                                                                            `${segment.HandBaggage} hành lý xách tay`}
-                                                                        {segment.BaggageAllowance &&
-                                                                            ` và ${segment.BaggageAllowance} hành lý ký gửi`}
-                                                                    </Typography>
-                                                                </div>
-                                                                <div className='flex gap-1'>
-                                                                    <i className='icon icon-change-money text-[20px]' />
-                                                                    <Typography
-                                                                        customClasses={{
-                                                                            root: '!text-[13px] leading-[20px]',
-                                                                        }}
-                                                                    >
-                                                                        <Typography htmlTag='span' variant='subtitle14'>
-                                                                            Hoàn huỷ:
-                                                                        </Typography>{' '}
-                                                                        {fareRule?.Translations[0].CancellationRefund ||
-                                                                            'Không được phép'}
-                                                                    </Typography>
-                                                                </div>
-                                                                <div className='flex gap-1'>
-                                                                    <i className='icon icon-change-time text-[20px]' />
-                                                                    <Typography
-                                                                        customClasses={{
-                                                                            root: '!text-[13px] leading-[20px]',
-                                                                        }}
-                                                                    >
-                                                                        <Typography htmlTag='span' variant='subtitle14'>
-                                                                            Đổi thời gian bay:
-                                                                        </Typography>{' '}
-                                                                        {fareRule?.Translations[0].TimeChange ||
-                                                                            'Không được phép'}
-                                                                    </Typography>
-                                                                </div>
-                                                                <div className='flex gap-1'>
-                                                                    <i className='icon icon-ticket-back text-[20px]' />
-                                                                    <Typography
-                                                                        customClasses={{
-                                                                            root: '!text-[13px] leading-[20px]',
-                                                                        }}
-                                                                    >
-                                                                        <Typography htmlTag='span' variant='subtitle14'>
-                                                                            Đổi lịch bay:
-                                                                        </Typography>{' '}
-                                                                        {fareRule?.Translations[0].ItineraryChange ||
-                                                                            'Không được phép'}
-                                                                    </Typography>
-                                                                </div>
-                                                                <div className='flex gap-1'>
-                                                                    <i className='icon icon-ticket-back text-[20px]' />
-                                                                    <Typography
-                                                                        customClasses={{
-                                                                            root: '!text-[13px] leading-[20px]',
-                                                                        }}
-                                                                    >
-                                                                        <Typography htmlTag='span' variant='subtitle14'>
-                                                                            Thay đổi thông tin:
-                                                                        </Typography>{' '}
-                                                                        {fareRule?.Translations[0]
-                                                                            .PassengerInfoChange || 'Không được phép'}
-                                                                    </Typography>
-                                                                </div>
+                                                <>
+                                                    {index >= 1 && (
+                                                        <div className='flex gap-3 p-3 h-[48px] bg-grey-200 rounded-lg w-full'>
+                                                            <span className='text-danger font-bold'>
+                                                                {flightMinutesDurationFormat(
+                                                                    flight.Duration -
+                                                                        (flight.ListSegment[index - 1].FlightTime +
+                                                                            segment.FlightTime),
+                                                                )}
+                                                            </span>
+                                                            <div className='flex items-end'>
+                                                                <span>
+                                                                    Chuyển máy bay ở {segment.StartPointCityName} (
+                                                                    {segment.StartPoint}) -{' '}
+                                                                </span>
+                                                                <span className='text-[13px] leading-[22px] text-danger'>
+                                                                    Thời gian quá cảnh dài. Có thể cần ký gửi hành lý.
+                                                                </span>
                                                             </div>
                                                         </div>
-                                                    }
-                                                />
+                                                    )}
+                                                    <Card
+                                                        key={`${segment.AirlineCode}_${index}`}
+                                                        variant='border'
+                                                        customClasses={{
+                                                            root: 'w-full',
+                                                        }}
+                                                        noPadding
+                                                        body={
+                                                            <div className='flex min-h-[184px] p-6 gap-4 w-full'>
+                                                                <div className='flex flex-col w-[135px]'>
+                                                                    <div className=''>
+                                                                        {getAirlineLogo(flight.AirlineCode, {
+                                                                            width: 48,
+                                                                            height: 48,
+                                                                        })}
+                                                                    </div>
+                                                                    <div className='flex flex-col text-[13px]'>
+                                                                        <span className='text-grey-800'>
+                                                                            {segment.AirlineName}
+                                                                        </span>
+                                                                        <span className='text-grey-500'>
+                                                                            {segment.FlightNumber} •{' '}
+                                                                            {getPlaneType(Number(segment.Plane))}
+                                                                        </span>
+                                                                        <span className='text-grey-500'>
+                                                                            Loại vé: {flight.GroupClass}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div className='flex gap-2 w-[355px]'>
+                                                                    <div className='flex flex-col gap-0.5 justify-between h-full pb-4'>
+                                                                        <i className='icon icon-flight-pland text-[24px]' />
+                                                                        <div className='flex justify-center flex-1'>
+                                                                            <Divider
+                                                                                vertical
+                                                                                className='h-full'
+                                                                                color='grey-800'
+                                                                            />
+                                                                        </div>
+                                                                        <i className='icon icon-location text-[24px]' />
+                                                                    </div>
+                                                                    <div className='flex flex-col gap-2 justify-between flex-1'>
+                                                                        <div className='flex gap-4'>
+                                                                            <div className='flex flex-col'>
+                                                                                <span className='font-bold'>
+                                                                                    {formatFlightTime(
+                                                                                        segment.StartDate,
+                                                                                    )}
+                                                                                </span>
+                                                                                <span className='text-[13px] text-grey-500'>
+                                                                                    {formatFlightDate(
+                                                                                        segment.StartDate,
+                                                                                    )}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className='flex flex-col'>
+                                                                                <span className='font-bold'>
+                                                                                    {segment.StartPointCityName} (
+                                                                                    {segment.StartPoint})
+                                                                                </span>
+                                                                                <span className='text-[13px] text-grey-500'>
+                                                                                    {segment.StartPointName}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className='flex items-center gap-1'>
+                                                                            <i className='icon icon-clock text-[24px]' />
+                                                                            <span className='text-success'>
+                                                                                {flightMinutesDurationFormat(
+                                                                                    segment.FlightTime,
+                                                                                )}
+                                                                            </span>
+                                                                        </div>
+                                                                        <div className='flex gap-4'>
+                                                                            <div className='flex flex-col'>
+                                                                                <span className='font-bold'>
+                                                                                    {formatFlightTime(segment.EndDate)}
+                                                                                </span>
+                                                                                <span className='text-[13px] text-grey-500'>
+                                                                                    {formatFlightDate(segment.EndDate)}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className='flex flex-col'>
+                                                                                <span className='font-bold'>
+                                                                                    {segment.EndPointCityName} (
+                                                                                    {segment.EndPoint})
+                                                                                </span>
+                                                                                <span className='text-[13px] text-grey-500'>
+                                                                                    {segment.EndPointName}
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className='flex flex-col gap-2 flex-1 text-[13px] text-grey-800'>
+                                                                    <div className='flex gap-1'>
+                                                                        <i className='icon icon-baggade text-[20px]' />
+                                                                        <Typography
+                                                                            customClasses={{
+                                                                                root: '!text-[13px] leading-[20px]',
+                                                                            }}
+                                                                        >
+                                                                            <Typography
+                                                                                htmlTag='span'
+                                                                                variant='subtitle14'
+                                                                            >
+                                                                                Hành lý:
+                                                                            </Typography>{' '}
+                                                                            {segment.HandBaggage &&
+                                                                                `${segment.HandBaggage} hành lý xách tay`}
+                                                                            {segment.BaggageAllowance &&
+                                                                                ` và ${segment.BaggageAllowance} hành lý ký gửi`}
+                                                                        </Typography>
+                                                                    </div>
+                                                                    <div className='flex gap-1'>
+                                                                        <i className='icon icon-change-money text-[20px]' />
+                                                                        <Typography
+                                                                            customClasses={{
+                                                                                root: '!text-[13px] leading-[20px]',
+                                                                            }}
+                                                                        >
+                                                                            <Typography
+                                                                                htmlTag='span'
+                                                                                variant='subtitle14'
+                                                                            >
+                                                                                Hoàn huỷ:
+                                                                            </Typography>{' '}
+                                                                            {fareRule?.Translations[0]
+                                                                                .CancellationRefund ||
+                                                                                'Không được phép'}
+                                                                        </Typography>
+                                                                    </div>
+                                                                    <div className='flex gap-1'>
+                                                                        <i className='icon icon-change-time text-[20px]' />
+                                                                        <Typography
+                                                                            customClasses={{
+                                                                                root: '!text-[13px] leading-[20px]',
+                                                                            }}
+                                                                        >
+                                                                            <Typography
+                                                                                htmlTag='span'
+                                                                                variant='subtitle14'
+                                                                            >
+                                                                                Đổi thời gian bay:
+                                                                            </Typography>{' '}
+                                                                            {fareRule?.Translations[0].TimeChange ||
+                                                                                'Không được phép'}
+                                                                        </Typography>
+                                                                    </div>
+                                                                    <div className='flex gap-1'>
+                                                                        <i className='icon icon-ticket-back text-[20px]' />
+                                                                        <Typography
+                                                                            customClasses={{
+                                                                                root: '!text-[13px] leading-[20px]',
+                                                                            }}
+                                                                        >
+                                                                            <Typography
+                                                                                htmlTag='span'
+                                                                                variant='subtitle14'
+                                                                            >
+                                                                                Đổi lịch bay:
+                                                                            </Typography>{' '}
+                                                                            {fareRule?.Translations[0]
+                                                                                .ItineraryChange || 'Không được phép'}
+                                                                        </Typography>
+                                                                    </div>
+                                                                    <div className='flex gap-1'>
+                                                                        <i className='icon icon-ticket-back text-[20px]' />
+                                                                        <Typography
+                                                                            customClasses={{
+                                                                                root: '!text-[13px] leading-[20px]',
+                                                                            }}
+                                                                        >
+                                                                            <Typography
+                                                                                htmlTag='span'
+                                                                                variant='subtitle14'
+                                                                            >
+                                                                                Thay đổi thông tin:
+                                                                            </Typography>{' '}
+                                                                            {fareRule?.Translations[0]
+                                                                                .PassengerInfoChange ||
+                                                                                'Không được phép'}
+                                                                        </Typography>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    />
+                                                </>
                                             );
                                         })}
                                         {/* <div className='flex gap-3 p-3 h-[48px] bg-grey-200 rounded-lg w-full'>
@@ -418,71 +465,51 @@ const FlightCard = (props: Props) => {
                                                 </tr>
                                                 <tr>
                                                     <td className='text-grey-800 text-left p-1.5'>Giá vé người lớn</td>
-                                                    <td className='text-grey-800 text-right p-1.5'>
-                                                        {sessionData?.InitSessionData?.Adult}
-                                                    </td>
+                                                    <td className='text-grey-800 text-right p-1.5'>{Adult}</td>
                                                     <td className='text-grey-800 text-right p-1.5'>
                                                         {currencyFormat(adultPrice)}
                                                     </td>
                                                     <td className='text-grey-800 text-right p-1.5'>
-                                                        {currencyFormat(
-                                                            adultPrice * (sessionData?.InitSessionData?.Adult || 0),
-                                                        )}
+                                                        {currencyFormat(adultPrice * Adult)}
                                                     </td>
                                                 </tr>
-                                                {Boolean(sessionData?.InitSessionData?.Children) && (
+                                                {Boolean(Children) && (
                                                     <tr>
                                                         <td className='text-grey-800 text-left p-1.5'>Giá vé trẻ em</td>
-                                                        <td className='text-grey-800 text-right p-1.5'>
-                                                            {sessionData?.InitSessionData?.Children}
-                                                        </td>
+                                                        <td className='text-grey-800 text-right p-1.5'>{Children}</td>
                                                         <td className='text-grey-800 text-right p-1.5'>
                                                             {currencyFormat(childrenPrice)}
                                                         </td>
                                                         <td className='text-grey-800 text-right p-1.5'>
-                                                            {currencyFormat(
-                                                                childrenPrice *
-                                                                    (sessionData?.InitSessionData?.Children || 0),
-                                                            )}
+                                                            {currencyFormat(childrenPrice * Children)}
                                                         </td>
                                                     </tr>
                                                 )}
-                                                {Boolean(sessionData?.InitSessionData?.Infant) && (
+                                                {Boolean(Infant) && (
                                                     <tr>
                                                         <td className='text-grey-800 text-left p-1.5'>Giá vé em bé</td>
-                                                        <td className='text-grey-800 text-right p-1.5'>
-                                                            {sessionData?.InitSessionData?.Infant}
-                                                        </td>
+                                                        <td className='text-grey-800 text-right p-1.5'>{Infant}</td>
                                                         <td className='text-grey-800 text-right p-1.5'>
                                                             {currencyFormat(infantPrice)}
                                                         </td>
                                                         <td className='text-grey-800 text-right p-1.5'>
-                                                            {currencyFormat(
-                                                                infantPrice *
-                                                                    (sessionData?.InitSessionData?.Infant || 0),
-                                                            )}
+                                                            {currencyFormat(infantPrice * Infant)}
                                                         </td>
                                                     </tr>
                                                 )}
                                                 <tr>
                                                     <td className='text-grey-800 text-left p-1.5 font-bold'>Tổng</td>
                                                     <td className='text-grey-800 text-right p-1.5 font-bold'>
-                                                        {sessionData?.InitSessionData?.Adult ||
-                                                            0 +
-                                                                (sessionData?.InitSessionData?.Children || 0) +
-                                                                (sessionData?.InitSessionData?.Infant || 0)}{' '}
-                                                        khách
+                                                        {Adult + Children + Infant} khách
                                                     </td>
                                                     <td className='text-grey-800 text-right p-1.5 font-bold text-warning'>
                                                         {/* 4,260,000₫ */}
                                                     </td>
                                                     <td className='text-grey-800 text-right p-1.5 font-bold text-warning'>
                                                         {currencyFormat(
-                                                            adultPrice * (sessionData?.InitSessionData?.Adult || 0) +
-                                                                childrenPrice *
-                                                                    (sessionData?.InitSessionData?.Children || 0) +
-                                                                infantPrice *
-                                                                    (sessionData?.InitSessionData?.Infant || 0),
+                                                            adultPrice * Adult +
+                                                                childrenPrice * Children +
+                                                                infantPrice * Infant,
                                                         )}
                                                     </td>
                                                 </tr>

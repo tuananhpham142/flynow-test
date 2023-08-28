@@ -10,33 +10,69 @@ import {
     dayjs,
 } from '@acme/design-system';
 import { DateValueType } from '@acme/design-system/DatePicker/DatePicker.types';
-import { FC, useState } from 'react';
-import AccommodationAutosuggestResult from './AccommodationAutosuggestResult';
+import React, { FC, useState } from 'react';
+import AcdAutosuggestionResult from './AcdAutosuggestionResult';
+import { AcdSearchQuery } from '../../../types/Accommodation/AcdRequest';
+import { queryString } from '@acme/utils';
+import { useRouter } from 'next/navigation';
+import { routePaths } from '@acme/utils';
+import OccupancyPopup from './OccupancyPopup';
 
-interface IProps {}
+interface IProps {
+    isHomePage?: boolean;
+    initQuery?: AcdSearchQuery;
+    onSubmit: (data: AcdSearchQuery) => void;
+}
 
 const AccommodationSearch: FC<IProps> = (props) => {
+    const {
+        isHomePage,
+        onSubmit,
+        initQuery = {
+            Rooms: 1,
+            Adult: 1,
+            Children: 0,
+            Destination: '',
+            CheckIn: dayjs().format('YYYY-MM-DD'),
+            CheckOut: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+        },
+    } = props;
+    const router = useRouter();
+
+    // States
     const [valueDatePicker, setValueDatePicker] = useState<DateValueType>({
-        startDate: null,
-        endDate: null,
+        startDate: initQuery.CheckIn,
+        endDate: initQuery.CheckOut,
     });
-    const [keyword, setKeyword] = useState<string>('');
+    const [destination, setDestination] = useState<string>('');
+    const [occupancy, setOccupancy] = useState({
+        Rooms: 1,
+        Adult: 1,
+        Children: 0,
+    });
+    // End States
+
+    const handleSubmitSearch = () => {
+        const acdQuery: AcdSearchQuery = {
+            ...occupancy,
+            Destination: destination,
+            CheckIn: valueDatePicker.startDate as string,
+            CheckOut: valueDatePicker.endDate as string,
+        };
+        const searchParams = queryString.stringify(acdQuery);
+
+        if (isHomePage) {
+            window.location.assign(`${window.location.origin + routePaths.accommodation}?${searchParams}`);
+        } else {
+            router.replace(`?${searchParams}`);
+            onSubmit(acdQuery);
+        }
+    };
 
     return (
         <>
             <div className='rounded w-full flex items-center gap-2'>
-                <div className='flex items-center'>
-                    <Typography className='text-grey-800 me-2'>1 Người lớn, 2 Trẻ em, 1 Em bé</Typography>
-
-                    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                        <path
-                            fill-rule='evenodd'
-                            clip-rule='evenodd'
-                            d='M4.29289 8.29289C4.68342 7.90237 5.31658 7.90237 5.70711 8.29289L12 14.5858L18.2929 8.29289C18.6834 7.90237 19.3166 7.90237 19.7071 8.29289C20.0976 8.68342 20.0976 9.31658 19.7071 9.70711L12.7071 16.7071C12.3166 17.0976 11.6834 17.0976 11.2929 16.7071L4.29289 9.70711C3.90237 9.31658 3.90237 8.68342 4.29289 8.29289Z'
-                            fill='#212B36'
-                        />
-                    </svg>
-                </div>
+                <OccupancyPopup occupancyData={occupancy} onChange={setOccupancy} />
             </div>
             <div className='flex gap-2'>
                 <div className='flex gap-2 grow'>
@@ -70,15 +106,15 @@ const AccommodationSearch: FC<IProps> = (props) => {
                                                 </svg>
                                             </span>
                                         }
-                                        value={keyword}
-                                        onChange={(e) => setKeyword(e.target.value)}
+                                        value={destination}
+                                        onChange={(e) => setDestination(e.target.value)}
                                         fullWidth
                                         size='lg'
                                         placeholder='Điểm đến'
                                     />
                                 </PopoverTrigger>
-                                <PopoverContent className='z-100'>
-                                    <AccommodationAutosuggestResult result={[]} />
+                                <PopoverContent className='z-100 !w-[600px]'>
+                                    <AcdAutosuggestionResult result={[]} />
                                 </PopoverContent>
                             </Popover>
                         </div>
@@ -179,7 +215,13 @@ const AccommodationSearch: FC<IProps> = (props) => {
                     </div>
                 </div>
                 <div className='rounded w-[120px]'>
-                    <Button variant='contained' color='primary' className='h-full w-full'>
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        className='h-full w-full'
+                        rounded='lg'
+                        onClick={handleSubmitSearch}
+                    >
                         Tìm kiếm
                     </Button>
                 </div>

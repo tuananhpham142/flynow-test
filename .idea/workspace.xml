@@ -4,19 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c892746-effc-4508-a684-06d5d8a8d283" name="Default Changelist" comment="feat: manage accommodation bookings components">
-      <change afterPath="$PROJECT_DIR$/apps/user/src/app/accommodation-booking/[slug]/page.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/user/src/app/accommodation-booking/layout.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/apps/user/src/views/Accommodation/Detail/index.tsx" afterDir="false" />
+    <list default="true" id="7c892746-effc-4508-a684-06d5d8a8d283" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/apps/accommodation/src/types/Media/MediaEnum.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/accommodation/src/types/Media/MediaModel.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/accommodation/src/types/Review/ReviewModel.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/accommodation/src/types/Tag/TagEnum.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/accommodation/src/types/Tag/TagModel.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/components/Cards/AccommodationIntro.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/components/Cards/AccommodationIntro.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/app/preview/[slug]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/app/preview/[slug]/page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/accommodation/src/components/Cards/RecommendCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/components/Cards/RecommendCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/components/Cards/RoomClassCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/components/Cards/RoomClassCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/types/Accommodation/AcdResponse.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/types/Accommodation/AcdModel.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/DetailsInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/DetailsInfo.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/GeneralInfo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/GeneralInfo.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/user/src/app/accommodation-bookings/layout.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/user/src/app/accommodation-bookings/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/user/src/app/accommodation-booking/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/user/src/components/Cards/OrderPlacedCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/user/src/components/Cards/OrderPlacedCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/user/src/views/ListBooking/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/user/src/views/Accommodation/List/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/acme-design-system/src/Progress/Progress.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/acme-design-system/src/Progress/Progress.types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/Recommend.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/Recommend.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/Reviews.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/Reviews.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/RoomTypesSelection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/RoomTypesSelection.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/SlideShow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/components/SlideShow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/views/AccommodationDetail/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/views/ListAccommodation/components/Maps/MapsMarker.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/views/ListAccommodation/components/Maps/MapsMarker.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/accommodation/src/views/ListAccommodation/components/Maps/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/accommodation/src/views/ListAccommodation/components/Maps/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +52,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feat/design_accommodation_page" />
+        <entry key="$PROJECT_DIR$" value="feat/search_acd" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -76,15 +83,15 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="18.0.0" />
     <property name="javascript.nodejs.core.library.typings.version" value="18.0.0" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/apps/user" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/packages/acme-pages/src/components/Search/Accommodation" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.standard" value="" />
     <property name="nodejs_package_manager_path" value="pnpm" />
     <property name="prettierjs.PrettierConfiguration.Package" value="D:\Zprojects\flynow-next-microfe\node_modules\prettier" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2021.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="settings.editor.selected.configurable" value="settings.javascript.linters.eslint" />
+    <property name="ts.external.directory.path" value="D:\Zprojects\flynow-next-microfe\packages\acme-utils\node_modules\typescript\lib" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="Push.Settings">
@@ -94,11 +101,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Zprojects\flynow-next-microfe\packages\acme-pages\src\components\Search\Accommodation" />
+      <recent name="D:\Zprojects\flynow-next-microfe\packages\acme-utils\src" />
+      <recent name="D:\Zprojects\flynow-next-microfe\apps\accommodation\src\app" />
       <recent name="D:\Zprojects\flynow-next-microfe\apps\user" />
       <recent name="D:\Zprojects\flynow-next-microfe\apps\accommodation\src\app\components" />
-      <recent name="D:\Zprojects\flynow-next-microfe\apps\accommodation\src\views\AccommodationDetail" />
-      <recent name="D:\Zprojects\flynow-next-microfe\apps\accommodation\src\views\AccommodationDetail\components" />
-      <recent name="D:\Zprojects\flynow-next-microfe\packages\acme-design-system\src" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Zprojects\flynow-next-microfe\apps\user\src\views\Accommodation\List" />
@@ -128,6 +135,9 @@
       <workItem from="1691144978914" duration="2394000" />
       <workItem from="1691374142274" duration="4817000" />
       <workItem from="1691380314853" duration="66079000" />
+      <workItem from="1692065654116" duration="96602000" />
+      <workItem from="1692764789986" duration="45157000" />
+      <workItem from="1693188494384" duration="26421000" />
     </task>
     <task id="LOCAL-00001" summary="init components">
       <created>1688633331931</created>
@@ -325,7 +335,42 @@
       <option name="project" value="LOCAL" />
       <updated>1691579433666</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="feat: manage accommodation bookings components">
+      <created>1692082722288</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1692082722288</updated>
+    </task>
+    <task id="LOCAL-00030" summary="feat: manage accommodation bookings components">
+      <created>1692098104521</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1692098104521</updated>
+    </task>
+    <task id="LOCAL-00031" summary="feat: manage accommodation bookings components">
+      <created>1692183571635</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1692183571635</updated>
+    </task>
+    <task id="LOCAL-00032" summary="manage accommodation bookings components">
+      <created>1692243989287</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1692243989287</updated>
+    </task>
+    <task id="LOCAL-00033" summary="manage accommodation bookings components">
+      <created>1692700886211</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1692700886211</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -360,7 +405,8 @@
     <MESSAGE value="feat: booking components" />
     <MESSAGE value="feat: design accommodation page" />
     <MESSAGE value="feat: manage accommodation bookings components" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: manage accommodation bookings components" />
+    <MESSAGE value="manage accommodation bookings components" />
+    <option name="LAST_COMMIT_MESSAGE" value="manage accommodation bookings components" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

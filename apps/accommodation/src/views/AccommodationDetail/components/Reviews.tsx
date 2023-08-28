@@ -2,11 +2,17 @@
 import { Typography, Button } from '@acme/design-system';
 import React, { FC } from 'react';
 import ReviewItem from '@acme/pages/components/ReviewAndRating/ReviewItem';
+import { ReviewItemModel } from '@/types/Review/ReviewModel';
 
-interface IProps {}
+interface IProps {
+    reviews: Array<ReviewItemModel>;
+    totalRating: number;
+    totalRatingText: string;
+    totalReview: number;
+}
 
 const Reviews: FC<IProps> = (props) => {
-    const {} = props;
+    const { reviews, totalReview, totalRating, totalRatingText } = props;
 
     return (
         <div className='mt-10'>
@@ -22,26 +28,26 @@ const Reviews: FC<IProps> = (props) => {
                         variant={'subtitle20'}
                         className={'rounded bg-blue px-2 py-2.5 text-white'}
                     >
-                        9.9
+                        {totalRating}
                     </Typography>
                     <div>
                         <Typography variant={'subtitle14'} className={'!text-primary'}>
-                            Xuất sắc
+                            {totalRatingText || 'Trung bình'}
                         </Typography>
                         <Typography variant={'caption'} className={'!text-grey-500'}>
-                            2345 đánh giá trên dịch vụ
+                            {totalReview} đánh giá trên dịch vụ
                         </Typography>
                     </div>
                 </div>
                 {/*review*/}
-                <div>
-                    <ReviewItem />
-                </div>
-                <div className={'text-center'}>
-                    <Button rounded={'rounded'} className={'mt-4'}>
-                        Xem hết đánh giá
-                    </Button>
-                </div>
+                <div>{reviews.length ? reviews.map(() => <ReviewItem />) : 'Chưa có đánh giá'}</div>
+                {reviews.length ? (
+                    <div className={'text-center'}>
+                        <Button rounded={'rounded'} className={'mt-4'}>
+                            Xem hết đánh giá
+                        </Button>
+                    </div>
+                ) : null}
             </div>
         </div>
     );

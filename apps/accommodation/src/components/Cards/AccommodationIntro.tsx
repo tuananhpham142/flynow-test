@@ -2,9 +2,9 @@
 import React, { FC } from 'react';
 import { Card, Tag, Typography } from '@acme/design-system';
 import Image from 'next/image';
-import TicketTag from '../Tags/TicketTag';
 import Link from 'next/link';
 import StarRated from '@acme/pages/components/ReviewAndRating/StarRated';
+import TicketTag from '@/components/Tags/TicketTag';
 
 interface IProps {}
 
@@ -21,7 +21,7 @@ const AccommodationIntro: FC<IProps> = (props) => {
                     <Image src={'https://picsum.photos/180'} alt='avatar_room' width={180} height={180} />
                     <div className={'p-3 flex justify-between w-full'}>
                         <div className='flex flex-col gap-1'>
-                            <Link href={'/[slug]-services/slug-id'}>
+                            <Link href={'/slug-id'}>
                                 <Typography variant={'subtitle16'} className={'!text-primary cursor-pointer'}>
                                     The Luxury Collection Hotels & Resorts
                                 </Typography>

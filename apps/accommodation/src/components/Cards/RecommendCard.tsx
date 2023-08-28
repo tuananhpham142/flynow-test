@@ -3,11 +3,15 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import StarRated from '@acme/pages/components/ReviewAndRating/StarRated';
+import { AcdDetailResponse } from '@/types/Accommodation/AcdModel';
 
-interface IProps {}
+interface IProps {
+    hoverAction?(id: string): void;
+    room: AcdDetailResponse;
+}
 
 const RecommendCard: FC<IProps> = (props) => {
-    const {} = props;
+    const { hoverAction, room } = props;
 
     return (
         <Card
@@ -15,7 +19,14 @@ const RecommendCard: FC<IProps> = (props) => {
             noPadding
             rounded={'lg'}
             body={
-                <div>
+                <div
+                    onMouseEnter={() => {
+                        hoverAction && hoverAction(room.Id);
+                    }}
+                    onMouseLeave={() => {
+                        hoverAction && hoverAction('');
+                    }}
+                >
                     <div className={'relative'}>
                         <Image
                             src={'https://picsum.photos/300'}

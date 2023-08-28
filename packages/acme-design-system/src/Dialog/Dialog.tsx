@@ -25,7 +25,7 @@ const Dialog: React.FC<DialogProps<any>> = (props: DialogProps<any>) => {
     } = props;
     const mountTransition = useMountTransition(visible, 200);
 
-    const rootClasses = clsx('relative z-30 animate-fadeOutUp', visible && '!block');
+    const rootClasses = clsx('relative z-[120] animate-fadeOutUp', visible && '!block');
 
     const dialogClasses = clsx(
         'relative bg-white overflow-hidden rounded-lg text-left shadow-xl sm:my-8 sm:w-full sm:max-w-lg animate-fadeInDown',
@@ -54,7 +54,7 @@ const Dialog: React.FC<DialogProps<any>> = (props: DialogProps<any>) => {
             {mountTransition && (
                 <>
                     <div className='fixed inset-0 bg-grey-700 bg-opacity-75' />
-                    <div className='fixed inset-0 z-10 overflow-y-auto'>
+                    <div className='fixed inset-0 z-[110] overflow-y-auto'>
                         <div
                             className='flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0'
                             onClick={(e) => handleBackdropClick(e)}

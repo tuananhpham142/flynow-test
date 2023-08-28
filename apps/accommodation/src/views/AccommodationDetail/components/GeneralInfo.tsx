@@ -2,11 +2,35 @@
 import React, { FC } from 'react';
 import { Button, Tag, Typography, IconButton, Progress } from '@acme/design-system';
 import StarRated from '@acme/pages/components/ReviewAndRating/StarRated';
+import { TagModel } from '@/types/Tag/TagModel';
+import { OverallRatingModel } from '@/types/Review/ReviewModel';
 
-interface IProps {}
+interface IProps {
+    specialAmenities: Array<TagModel>;
+    features: Array<TagModel>;
+    overallRating: OverallRatingModel;
+    name: string;
+    description: string;
+    totalRating: number;
+    totalReview: number;
+    price: number;
+    unitPrice: number;
+    isPreviewPage?: boolean;
+}
 
 const GeneralInfo: FC<IProps> = (props) => {
-    const {} = props;
+    const {
+        isPreviewPage,
+        description,
+        name,
+        overallRating,
+        totalReview,
+        totalRating,
+        features,
+        specialAmenities,
+        unitPrice,
+        price,
+    } = props;
 
     const renderFeaturedItem = () => {
         return (
@@ -35,13 +59,29 @@ const GeneralInfo: FC<IProps> = (props) => {
 
     const renderProgressRatingItem = () => {
         return (
-            <div className={'mb-3'}>
-                <div className='flex justify-between items-center mb-0.5'>
-                    <Typography variant={'body14'}>Sạch sẽ</Typography>
-                    <Typography variant={'subtitle14'}>9.0</Typography>
+            <>
+                <div className={'mb-3'}>
+                    <div className='flex justify-between items-center mb-0.5'>
+                        <Typography variant={'body14'}>Sạch sẽ</Typography>
+                        <Typography variant={'subtitle14'}>{overallRating.AvgCleanliness}</Typography>
+                    </div>
+                    <Progress percentage={50} color={'warning'} />
                 </div>
-                <Progress percentage={80} color={'warning'} />
-            </div>
+                <div className={'mb-3'}>
+                    <div className='flex justify-between items-center mb-0.5'>
+                        <Typography variant={'body14'}>Dịch vụ</Typography>
+                        <Typography variant={'subtitle14'}>{overallRating.AvgService}</Typography>
+                    </div>
+                    <Progress percentage={50} color={'warning'} />
+                </div>
+                <div className={'mb-3'}>
+                    <div className='flex justify-between items-center mb-0.5'>
+                        <Typography variant={'body14'}>Giá trị</Typography>
+                        <Typography variant={'subtitle14'}>{overallRating.AvgValuable}</Typography>
+                    </div>
+                    <Progress percentage={50} color={'warning'} />
+                </div>
+            </>
         );
     };
 
@@ -50,17 +90,13 @@ const GeneralInfo: FC<IProps> = (props) => {
             <div className={'flex items-center border-b border-grey-300 mb-4'}>
                 <div className='basis-3/4'>
                     <Typography htmlTag={'h5'} variant={'h5'}>
-                        The Luxury Collection Hotels & Resorts.
+                        {isPreviewPage && !name ? 'Tên cơ sở lưu trú' : name}
                     </Typography>
                     <div className='mt-1 mb-4'>
                         <StarRated />
                     </div>
                     <Typography variant={'body16'} className={'text-grey-700'}>
-                        Được xây dựng vào năm 2018, Golf Valley Hotel là sự bổ sung khác biệt cho Đà Lạt và là lựa chọn
-                        thông minh cho du khách. Từ đây, khách có thể tận dụng tối đa tất cả những gì thành phố sôi động
-                        cung cấp. Với vị trí thuận tiện, khách sạn dễ dàng đến các điểm đến phải xem của thành phố. Các
-                        tiện nghi và dịch vụ được cung cấp bởi Golf Valley Hotel đảm bảo cho bạn một kỳ nghỉ dễ chịu.
-                        ...Xem thêm
+                        {isPreviewPage && !description ? 'Mô tả chung của cơ sở lưu trú' : description}
                     </Typography>
                     <div className={'flex flex-row gap-2 my-3'}>
                         <Tag variant={'solid'} color={'warning'}>
@@ -83,7 +119,7 @@ const GeneralInfo: FC<IProps> = (props) => {
                 </div>
                 <div className='basis-1/4 text-end'>
                     <Typography htmlTag={'h5'} variant={'h5'} className={'text-orange'}>
-                        1.470.000₫
+                        {isPreviewPage && !price ? '0đ' : price}
                     </Typography>
                     <Typography variant={'body16'}>1 phòng/ 1 đêm</Typography>
                     <Button size={'xl'} rounded={'lg'} customClasses={{ root: 'mt-2 w-2/3' }}>
@@ -97,9 +133,9 @@ const GeneralInfo: FC<IProps> = (props) => {
                         Điểm nổi bật của khách sạn
                     </Typography>
                     <div className='flex flex-col gap-4'>
-                        {renderFeaturedItem()}
-                        {renderFeaturedItem()}
-                        {renderFeaturedItem()}
+                        {isPreviewPage && !features.length
+                            ? 'Chưa có thông tin'
+                            : features.map(() => renderFeaturedItem())}
                     </div>
                 </div>
                 <div className={'border-r border-grey-300 mx-4'} />
@@ -108,11 +144,9 @@ const GeneralInfo: FC<IProps> = (props) => {
                         Tiện ích khác biệt
                     </Typography>
                     <div className={'grid grid-cols-2 gap-x-6 gap-y-3'}>
-                        {renderAmenitiesItem()}
-                        {renderAmenitiesItem()}
-                        {renderAmenitiesItem()}
-                        {renderAmenitiesItem()}
-                        {renderAmenitiesItem()}
+                        {isPreviewPage && !specialAmenities.length
+                            ? 'Chưa có thông tin'
+                            : specialAmenities.map(() => renderAmenitiesItem())}
                     </div>
                 </div>
                 <div className={'border-r border-grey-300 mx-4'} />
@@ -123,17 +157,14 @@ const GeneralInfo: FC<IProps> = (props) => {
                             variant={'subtitle18'}
                             className={'rounded bg-blue px-2 text-white'}
                         >
-                            9.9
+                            {totalRating}
                         </Typography>
                         <Typography variant={'subtitle18'}>Khách hàng đánh giá</Typography>
                     </div>
-
-                    {renderProgressRatingItem()}
-                    {renderProgressRatingItem()}
                     {renderProgressRatingItem()}
 
                     <Typography variant={'caption'} className={'!text-primary'}>
-                        Xem 2345 đánh giá
+                        Xem {totalReview} đánh giá
                     </Typography>
                 </div>
             </div>

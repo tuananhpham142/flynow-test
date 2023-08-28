@@ -1,16 +1,17 @@
-import { createContext, useReducer } from 'react';
+import React, { createContext, useReducer } from 'react';
 
 // types
-import type { Action, AggregateData, FlightContextType, FlightProviderProps } from './FlightContext.type';
+import type { Action, FlightProviderProps, FlightContextType, AggregateData } from './FlightContext.type';
 
 // enums
-import { SessionModel } from '@/models/FlightSession/SessionModel';
 import { FlightDispatchEnum } from './FlightContext.type';
+import { SessionModel } from '@/models/FlightSession/SessionModel';
+import { useCookie } from '@/hooks/useCookie';
 
 // initial state
 const initialState: FlightContextType = {
     sessionId: '',
-    sessionData: null,
+    sessionData: undefined,
     departureAggregate: {
         AirlineCode: [],
         GroupClass: [],
@@ -28,10 +29,13 @@ const FlightContext = createContext<FlightContextType>(initialState);
 // handlers
 const handlers: Record<FlightDispatchEnum, (state: FlightContextType, action: Action) => FlightContextType> = {
     updateSessionData: (state, action) => {
-        const { sessionData } = action.payload;
+        const { sessionData } = action.payload as { sessionData: SessionModel };
 
         // update view mode
-        const flightViewMode = sessionData?.FlightInfoSelected?.length === 1 ? 2 : 1;
+        let flightViewMode = state.flightViewMode;
+        if (sessionData.InitSessionData.ItineraryType === 2) {
+            flightViewMode = sessionData?.FlightInfoSelected?.length === 1 ? 2 : 1;
+        }
 
         return { ...state, sessionData: sessionData, flightViewMode: flightViewMode };
     },
@@ -53,6 +57,9 @@ const reducer = (state: FlightContextType, action: Action) =>
 const FlightProvider = (props: FlightProviderProps) => {
     const { children } = props;
     const [state, dispatch] = useReducer(reducer, initialState);
+    // const { cookie: sessionId, setCookieValue, removeCookie } = useCookie('flight-session-id');
+
+    // console.log(sessionId);
 
     const updateFlightAggregate = (departureAggregate: AggregateData) => {
         dispatch({

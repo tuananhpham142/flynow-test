@@ -1,14 +1,14 @@
-import ListAccommodation from '@/views/ListAccommodation';
+import ListAccommodationView from '@/views/ListAccommodation';
 import { FC } from 'react';
 
 interface IProps {}
 
-const Index: FC<IProps> = (props) => {
+const ListAccommodationPage: FC<IProps> = (props) => {
     const {} = props;
 
-    return <ListAccommodation />;
+    return <ListAccommodationView />;
 };
 
-Index.defaultProps = {};
+ListAccommodationPage.defaultProps = {};
 
-export default Index;
+export default ListAccommodationPage;

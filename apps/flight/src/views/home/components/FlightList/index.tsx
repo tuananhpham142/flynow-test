@@ -1,20 +1,23 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 // components
-import { ListRenderer } from '@acme/design-system';
+import { ListRenderer, Typography } from '@acme/design-system';
 import PlanTicketCard, { FlightCardSkeleton } from '../FlightCard/FlightCard';
 
 // services
 import { flightSelect } from '@/services';
 
 // types
-import FlightContext from '@/contexts/flight/FlightContext';
-import { useOnScreen } from '@/hooks/useOnScreen';
-import { FlightItinerary } from '@/models/Flight/FlightEnum';
 import type { FlattedFlight } from '@/models/Flight/FlightModel';
+import { useOnScreen } from '@/hooks/useOnScreen';
+import FlightContext from '@/contexts/flight/FlightContext';
+import { FlightItinerary } from '@/models/Flight/FlightEnum';
+import Logo from '@acme/pages/components/Logo';
+import EmptyResult from '../FlightCard/EmptyResult';
 
 type Props = {
     flights: Array<FlattedFlight>;
     isLoading: boolean;
+    isEmpty: boolean;
 };
 
 // constants
@@ -22,10 +25,8 @@ const LOADMORE_STEP = 15;
 const LOADMORE_DELAY = 1000;
 
 const FlightList = (props: Props) => {
-    const { flights, isLoading } = props;
+    const { flights, isLoading, isEmpty } = props;
     const { sessionId, flightViewMode, updateSessionData } = React.useContext(FlightContext);
-
-    console.log(flightViewMode);
 
     const [renderLimit, setRenderLimit] = useState<number>(LOADMORE_STEP);
     const [isSelecting, setIsSelecting] = useState<boolean>(false);
@@ -76,12 +77,10 @@ const FlightList = (props: Props) => {
                 const flightInfoSelected = res.data.Data.FlightInfoSelected;
                 if (flightInfoSelected.length === 1) {
                     if (res.data.Data.InitSessionData.ItineraryType === 1) {
-                        window.location.assign(`${window.location.origin}/booking/create-booking/${sessionId}`);
-                    } else {
-                        // updateFlightInfoSelected(flightInfoSelected);
+                        window.location.assign(`${window.location.origin}/booking/${sessionId}`);
                     }
                 } else {
-                    window.location.assign(`${window.location.origin}/booking/create-booking/${sessionId}`);
+                    window.location.assign(`${window.location.origin}/booking/${sessionId}`);
                 }
             }
         } catch (error) {
@@ -94,6 +93,7 @@ const FlightList = (props: Props) => {
 
     return (
         <>
+            {isEmpty && <EmptyResult />}
             {!isLoading ? (
                 <ListRenderer
                     renderKey={(item) => `${item.FlightSession}${item.GroupClass}${item.Class}`}

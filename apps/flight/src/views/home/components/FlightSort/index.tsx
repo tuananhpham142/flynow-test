@@ -1,10 +1,11 @@
 // components
-import React from 'react';
+import React, { useContext } from 'react';
 import { Select, Skeleton, Typography } from '@acme/design-system';
 
 // types
 import type { OptionItem, FlightSort } from '@/types/types';
 import { toThousandSeparator } from '@acme/utils';
+import FlightContext from '@/contexts/flight/FlightContext';
 
 const sortOptions: Array<FlightSort.SortOption> = [
     {
@@ -59,6 +60,7 @@ type Props = {
 
 const FlightSorting: React.FC<Props> = (props) => {
     const { totalResult, onSelect, isLoading } = props;
+    const { sessionData } = useContext(FlightContext);
     return (
         <>
             {isLoading ? (
@@ -72,7 +74,9 @@ const FlightSorting: React.FC<Props> = (props) => {
                                 root: '!font-semibold !text-2xl',
                             }}
                         >
-                            Chọn chiều đi
+                            {sessionData && sessionData?.FlightInfoSelected?.length === 1
+                                ? 'Chọn chiều về'
+                                : 'Chọn chiều đi'}
                         </Typography>
                         <Typography
                             customClasses={{
